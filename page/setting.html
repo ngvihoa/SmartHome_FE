@@ -61,6 +61,89 @@
     <!--  -->
     <div class="home_content">
         <div class="text">Setting</div>
+        <div class="main_content">
+            <div class="form-container">
+                <div class="form-tag">
+                    Light Setting
+                </div>
+                <form action="" method="post" id="light-setting">
+                    <label for="lights">Choose your device:</label>
+                    <select name="lights" id="lights" required>
+                        <option value="device 1">Device 1</option>
+                        <option value="device 2">Device 2</option>
+                    </select>
+
+                    <label for="intensity">Set the intensity of the light (%):</label>
+                    <input type="number" name="intensity" id="intensity" min="10" max="100" required> 
+                    
+                    <label for="automod">Auto Mod:</label>
+                    <input type="checkbox" name="automod" id="automod">
+                    <label for="automod" id="toggle-automod"></label>
+
+                    <label for="ontime">Turn On Time:</label>
+                    <input type="time" name="ontime" id="ontime" required>
+
+                    <label for="offtime">Turn Off Time:</label>
+                    <input type="time" name="offtime" id="offtime" required>
+
+                    <input type="button" value="Submit">
+                </form>
+            </div>
+            <div class="form-container">
+                <div class="form-tag">
+                    Fan Setting
+                </div>
+                <form action="" method="post" id="fan-setting">
+                    <label for="fans">Choose your device:</label>
+                    <select name="fans" id="fans" required>
+                        <option value="device 1">Device 1</option>
+                        <option value="device 2">Device 2</option>
+                    </select>
+
+                    <label for="temperature">Set the temperature for the fan (&#176;C):</label>
+                    <input type="number" name="temperature" id="temperature" min="25" max="30" required> 
+                    
+                    <label for="automod">Auto Mod:</label>
+                    <input type="checkbox" name="automod" id="automod">
+                    <label for="automod" id="toggle-automod"></label>
+
+                    <label for="ontime">Turn On Time:</label>
+                    <input type="time" name="ontime" id="ontime" required>
+
+                    <label for="offtime">Turn Off Time:</label>
+                    <input type="time" name="offtime" id="offtime" required>
+
+                    <input type="button" value="Submit">
+                </form>
+            </div>
+            <div class="form-container">
+                <div class="form-tag">
+                    Humidity Setting
+                </div>
+                <form action="" method="post" id="humidity-setting">
+                    <label for="humidities">Choose your device:</label>
+                    <select name="humidities" id="humidities" required>
+                        <option value="device 1">Device 1</option>
+                        <option value="device 2">Device 2</option>
+                    </select>
+
+                    <label for="moisture">Set the moisture for the humidity (%):</label>
+                    <input type="number" name="moisture" id="moisture" min="20" max="30" required> 
+                    
+                    <label for="automod">Auto Mod:</label>
+                    <input type="checkbox" name="automod" id="automod">
+                    <label for="automod" id="toggle-automod"></label>
+
+                    <label for="ontime">Turn On Time:</label>
+                    <input type="time" name="ontime" id="ontime" required>
+
+                    <label for="offtime">Turn Off Time:</label>
+                    <input type="time" name="offtime" id="offtime">
+
+                    <input type="button" value="Submit">
+                </form>
+            </div>
+        </div>
     </div>
 
 

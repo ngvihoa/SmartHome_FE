@@ -1,0 +1,16 @@
+body{
+    background-color: #F7F6F9;
+}
+
+button{
+    cursor: pointer;
+}
+
+.home_content .main_content{
+    display: flex;
+    width: 100%;
+    margin-bottom: 60px;
+    margin-top: 40px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
