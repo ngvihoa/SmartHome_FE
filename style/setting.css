@@ -9,8 +9,127 @@ button{
 .home_content .main_content{
     display: flex;
     width: 100%;
-    margin-bottom: 60px;
-    margin-top: 40px;
+    margin-bottom: 30px;
+    margin-top: 20px;
     gap: 20px;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
+    padding: 0 20px;
+    height: auto;
+}
+
+/*=========================================*/
+
+.main_content .form-container{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* border: 1px solid black; */
+}
+
+.form-container .form-tag{
+    margin-bottom: 5px;
+    font-size: 1.5rem;
+    color: #7385E0;
+    font-weight: 500;
+}
+
+.form-container form{
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 2px 2px 40px rgba(159, 171, 236, 0.2);
+    width: 99%;
+}
+
+form input, form select{
+    margin-bottom: 20px;
+    margin-top: 10px;
+    height: 40px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    border: 1px solid #7385E0;
+    padding: 2px 5px;
+}
+
+form label{
+    font-weight: 500;
+}
+
+form input[name='automod1'],
+form input[name='automod2'],
+form input[name='automod3']{
+    display: none;
+    font-size: 1rem;
+}
+
+form label#toggle-automod1, 
+form label#toggle-automod2,
+form label#toggle-automod3{
+    position: relative;
+    display: block;
+    width: 90px;
+    height: 30px;
+    background-color: #a9a9a9;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    margin-inline: auto;
+    cursor: pointer;
+    transition: background 200ms linear;
+}
+
+form label#toggle-automod1::before,
+form label#toggle-automod2::before,
+form label#toggle-automod3::before{
+    position: absolute;
+    top: 15px;
+    left: 0;
+    transform: translateY(-50%);
+    content: "";
+    display: block;
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: -2px 0px 2px #a5a5a5;
+    transition: left 200ms linear;
+}
+
+form input#automod1:checked + #toggle-automod1,
+form input:checked + #toggle-automod2,
+form input:checked + #toggle-automod3{
+    background-color: #7385E0;
+}
+
+form input#automod1:checked + #toggle-automod1::before,
+form input:checked + #toggle-automod2::before,
+form input:checked + #toggle-automod3::before{
+    left: 60px;
+    box-shadow: 2px 0px 2px #8796dd;
+}
+
+.btn-submit{
+    height: 40px;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #7385E0;
+    color: #fff;
+    font-weight: 500;
+    border: none;
+    box-shadow: 2px 2px 4px #8796dd;
+}
+
+.btn-submit:hover{
+    background-color: #384fc6;
+}
+
+
+@media screen and (max-width: 720px) {
+    .home_content .main_content{
+        flex-direction: column;
+    }
+    
 }

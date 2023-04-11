@@ -27,12 +27,12 @@ body{
 
 .home_content .text{
     font-size: 25px;
-    font-weight: 500;
+    font-weight: 800;
     color:#7385E0;
     margin: 12px;
     width: 100%;
     /* position: fixed; */
-    /* margin-bottom: 100px; */
+    margin-bottom: 0px;
 }
 
 .sidebar.active ~ .home_content{
