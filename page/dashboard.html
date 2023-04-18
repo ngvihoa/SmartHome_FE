@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart House | Dash board</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="../style/sidebar.css">
+    <!-- Only -->
+    <link rel="stylesheet" href="../style/dashboard.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo_content">
+            <div class="logo">
+                <i class='bx bxs-bot'></i>
+                <div class="logo_name">SmartHouse</div>
+            </div>
+            <i class='bx bx-menu' id="menu-btn"></i>
+        </div>
+        <!--  -->
+        <ul class="nav_list">
+            <li>
+                <a href="#">
+                    <i class="bx bx-grid-alt" ></i>
+                    <span class="links_name">Dashboard</span>
+                </a>
+                <span class="tooltip">Dashboard</span>
+            </li>
+            <li>
+                <a href="./setting.html">
+                    <i class='bx bxs-cog' ></i>
+                    <span class="links_name">Setting</span>
+                </a>
+                <span class="tooltip">Setting</span>
+            </li>
+    
+            <li>
+                <a href="./report.html">
+                    <i class='bx bxs-report' ></i>
+                    <span class="links_name">Report</span>
+                </a>
+                <span class="tooltip">Report</span>
+            </li>
+        </ul>
+        <!--  -->
+        <div class="user_content">
+            <div class="user">
+                <div class="user_details">
+                    <i class='bx bxs-user-rectangle'></i>
+                    <div class="user_name">
+                        <div class="name">Nguyen Van A</div>
+                    </div>
+                </div>
+                <i class='bx bx-log-out' id="log_out"></i>
+            </div>
+        </div>
+    </div>
+    <!--  -->
+    <div class="home_content">
+        <div class="text">DashBoard</div>
+        <div class="main_content">
+            <div class="light_content">
+                <div class="light_intensity">
+                    <div class="intensity_content">
+                        <i class='bx bxs-bulb' ></i>
+                        <div class="intensity"><span class="num">80</span><span>%</span></div>
+                    </div>
+                    <div class="stat_light_content stat_content">
+                        <span>State: </span>
+                        <div class="stat stat_on">
+                            <i class='bx bxs-check-circle'></i>
+                            <span>ON</span>
+                        </div>
+                        <div class="stat stat_off active">
+                            <i class='bx bxs-minus-circle' ></i>
+                            <span>OFF</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="light_controller">
+                    <form action="" method="post" class="intensity_controller changeNum">
+                        <div class="label">Change the intensity of the light</div>
+                        <div>
+                            <input type="text" name="intensity_input_box" id="intensity_input_box"> <span>%</span>
+                            <span><button class="changeNumBtn">Change</button></span>
+                        </div>
+                    </form>
+                    <form action="" method="post" class="stat_light_controller changeState">
+                        <div class="label">Change the state of the light</div>
+                        <div>
+                            <button class="changeStatOffBtn">Turn Off</button>
+                            <button class="changeStatOnBtn">Turn On</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="light_chart chart"><canvas id="lightChart"></canvas></div>
+            </div>
+            <div class="fan_content">
+                <div class="fan_temperature">
+                    <div class="temperature_content">
+                        <i class='bx bxs-thermometer' ></i>
+                        <div class="temperature"><span class="num">28</span><span>&#176;C</span></div>
+                    </div>
+                    <div class="stat_temperature_content stat_content">
+                        <span>State: </span>
+                        <div class="stat stat_on active">
+                            <i class='bx bxs-check-circle'></i>
+                            <span>ON</span>
+                        </div>
+                        <div class="stat stat_off">
+                            <i class='bx bxs-minus-circle' ></i>
+                            <span>OFF</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="fan_controller">
+                    <form action="" method="post" class="temperature_controller changeNum">
+                        <div class="label">Change the temperature in your room</div>
+                        <div>
+                            <input type="text" name="temperature_input_box" id="temperature_input_box"> <span>&#176;C</span>
+                            <span><button class="changeNumBtn">Change</button></span>
+                        </div>
+                    </form>
+                    <form action="" method="post" class="stat_temperature_controller changeState">
+                        <div class="label">Change the state of the fan</div>
+                        <div>
+                            <button class="changeStatOffBtn">Turn Off</button>
+                            <button class="changeStatOnBtn">Turn On</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="fan_chart chart"><canvas id="fanChart"></canvas></div>
+            </div>
+            <div class="humidity_content">
+                <div class="humidity_moisture">
+                    <div class="moisture_content">
+                        <i class='bx bxs-droplet' ></i>
+                        <div class="moisture"><span class="num">30</span><span>%</span></div>
+                    </div>
+                    <div class="stat_moisture_content stat_content ">
+                        <span>State: </span>
+                        <div class="stat stat_on active">
+                            <i class='bx bxs-check-circle'></i>
+                            <span>ON</span>
+                        </div>
+                        <div class="stat stat_off">
+                            <i class='bx bxs-minus-circle' ></i>
+                            <span>OFF</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="humidity_controller">
+                    <form action="" method="post" class="moisture_controller changeNum">
+                        <div class="label">Change the moisture in your room</div>
+                        <div>
+                            <input type="text" name="moisture_input_box" id="moisture_input_box"> <span>%</span>
+                            <span><button class="changeNumBtn">Change</button></span>
+                        </div>
+                    </form>
+                    <form action="" method="post" class="stat_moisture_controller changeState">
+                        <div class="label">Change the state of the humidity</div>
+                        <div>
+                            <button class="changeStatOffBtn">Turn Off</button>
+                            <button class="changeStatOnBtn">Turn On</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="humidity_chart chart"><canvas id="humidityChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../script/sidebar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Only -->
+    <script src="../script/dashboard.js"></script>
+</body>
+</html>
