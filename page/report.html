@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     <title>Smart House | Dash board</title>
+
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../style/style.css">
     <link rel="stylesheet" href="../style/sidebar.css">
@@ -61,9 +63,50 @@
     <!--  -->
     <div class="home_content">
         <div class="text">This is Report</div>
+        <div class="main_content">
+            <div class="notification-box">
+                <div class="notification-list">
+                    <div class="notification">
+                        <i>icon</i>
+                        <span>Content</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sub_content">
+            <div class="statistic-area">
+                <div class="statistic-box" id="light-stat">
+                    <div>Number of light devices</div>
+                    <div>1</div>
+                </div>
+                <div class="statistic-box" id="fan-stat">
+                    <div>Number of fan devices</div>
+                    <div>1</div>
+                </div>
+                <div class="statistic-box" id="humidity-stat">
+                    <div>Number of humidity devices</div>
+                    <div>1</div>
+                </div>
+            </div>
+            <div class="report-area">
+                <div class="report-topic">
+                    <ul>
+                        <li>Summary Report</li>
+                        <li>Light Report</li>
+                        <li>Fan Report</li>
+                        <li>Humidity Report</li>
+                    </ul>
+                </div>
+                <div class="report-form">
+                    <form action="" method="get"></form>
+                    <form action="" method="get"></form>
+                    <form action="" method="get"></form>
+                    <form action="" method="get"></form>
+                </div>
+            </div>
+        </div>
     </div>
-
-
+    
     <script src="../script/sidebar.js"></script>
     <!-- Only -->
     <script src="../script/report.js"></script>
