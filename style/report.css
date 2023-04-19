@@ -142,6 +142,7 @@ button{
     font-weight: 700;
     font-size: 2rem;
     text-align: center;
+    background-color: #fff;
 }
 
 .statistic-area .statistic-box div:first-child{
@@ -172,23 +173,115 @@ button{
 .report-area .report-topic ul li{
     padding: 10px 10px;
     z-index: 100;
+    border-radius: 10px;
     cursor: pointer;
+    transition: ease 0.3s;
+}
+
+.report-area .report-topic ul li:hover{
+    background-color: #b5b5b543;
+}
+
+.report-area .report-topic ul li.aim:hover{
+    background-color: #6066dd;
 }
 
 .report-area .report-form{
     width: 100%;
     height: 100%;
+    /* border: 1px solid black; */
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.report-form .setting-report{
+    width: 100%;
+    height: 120px;
     background-color: #fff;
     /* border: 1px solid black; */
     border-radius: 10px;
-    box-shadow: 2px 2px 40px rgba(159, 171, 236, 0.3);
+    box-shadow: 2px 2px 20px rgba(159, 171, 236, 0.3);
+}
 
+.report-form .result-report{
+    width: 100%;
+    height: 190px;
+    background-color: #fff;
+    /* border: 1px solid black; */
+    border-radius: 10px;
+    box-shadow: 2px 2px 20px rgba(159, 171, 236, 0.3);
+    overflow: auto;
+    padding: 20px 40px 20px 40px;
+}
+
+.report-form .result-report::-webkit-scrollbar{
+    display: none;
 }
 
 
+.nothing-text{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    /* font-weight: 700; */
+    color: #878787ba;
+    font-style:oblique ;
+}
+
+.report-table{
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    border-top: 1px solid #7e7e7e;
+    border-bottom: 1px solid #7e7e7e;
+
+}
+
+.report-table::-webkit-scrollbar{
+    display: none;
+}
+
+table, th, td{
+    border: 1px solid black;
+}
+
+.report-table table{
+    width: 100%;
+    text-align: center;
+    overflow-y: auto;
+    border-top: none;
+    border-bottom: none;
+}
+
+
+table tr th:first-child{
+    width: 70%;
+}
+
+th, td{
+    padding: 5px;
+}
+
+td button{
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #6066dd;
+    color: #fff;
+    border: none;
+}
+
+td button:hover{
+    background-color: #434dd2;
+}
 
 .aim{
     background-color: #6066dd;
     border-radius: 10px;
     color: #fff;
+    transition: linear 300ms;
 }
