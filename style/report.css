@@ -15,7 +15,7 @@ button{
 
 .main_content .notification-box{
     /* border: 1px solid red; */
-    width: 30%;
+    width: 60%;
     padding: 10px 10px 10px 20px;
 }
 
@@ -50,7 +50,7 @@ button{
 .notification-list .notification{
     /* border: 1px solid black; */
     border-radius: 10px;
-    min-height: 90px;
+    min-height: 80px;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -98,7 +98,7 @@ button{
 
 .main_content .sub_content{
     /* border: 1px solid red; */
-    width: calc(100% - 30%);
+    width: calc(100% - 40%);
     padding: 10px 20px;
     display: flex;
     flex-direction: column;
@@ -205,6 +205,43 @@ button{
     box-shadow: 2px 2px 20px rgba(159, 171, 236, 0.3);
 }
 
+.setting-report form{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 40px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.setting-report form .from-date *,
+.setting-report form .to-date *{
+    font-size: 1.1rem;
+}
+
+
+.setting-report form .from-date input,
+.setting-report form .to-date input{
+    padding: 3px 5px;
+    border-radius: 10px;
+    border: 1px solid #384fc6;
+}
+
+.setting-report form button{
+    font-size: 1.1rem;
+    padding: 5px 8px;
+    border-radius: 10px;
+    color: #fff;
+    background-color: #7385E0;
+    border: none;
+    box-shadow: 2px 2px 4px #8796dd;
+}
+
+.setting-report form button:hover{
+    background-color: #384fc6;
+}
+
+
 .report-form .result-report{
     width: 100%;
     height: 190px;
@@ -237,8 +274,8 @@ button{
     width: 100%;
     height: 100%;
     overflow-y: auto;
-    border-top: 1px solid #7e7e7e;
-    border-bottom: 1px solid #7e7e7e;
+    border-top: 1px solid #384fc6;
+    border-bottom: 1px solid #384fc6;
 
 }
 
@@ -247,7 +284,7 @@ button{
 }
 
 table, th, td{
-    border: 1px solid black;
+    border: 1px solid #384fc6;
 }
 
 .report-table table{
@@ -263,25 +300,33 @@ table tr th:first-child{
     width: 70%;
 }
 
-th, td{
+th{
     padding: 5px;
+}
+
+td{
+    padding: 6px;
 }
 
 td button{
     padding: 10px;
     border-radius: 10px;
-    background-color: #6066dd;
+    background-color: #7385E0;
     color: #fff;
     border: none;
+    box-shadow: 2px 2px 4px #8796dd;
+
 }
 
 td button:hover{
-    background-color: #434dd2;
+    background-color: #384fc6;
 }
 
 .aim{
-    background-color: #6066dd;
+    background-color: #7385E0;
     border-radius: 10px;
     color: #fff;
     transition: linear 300ms;
+    box-shadow: 2px 2px 4px #8796dd;
+
 }

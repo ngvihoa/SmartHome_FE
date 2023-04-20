@@ -231,10 +231,18 @@ button{
     padding: 6px;
     border: none;
     border-radius: 5px;
-    box-shadow: 1px 1px 3px #b1b1b1;
+    box-shadow: 1px 1px 3px #8796dd;
     background-color: #7385E0;
     color: #fff;
 }
+
+.light_controller form.changeNum div:last-child span:last-child button:hover,
+.fan_controller form.changeNum div:last-child span:last-child button:hover,
+.humidity_controller form.changeNum div:last-child span:last-child button:hover{
+    background-color: #384fc6;
+}
+
+
 
 .light_controller form.changeState div:last-child button,
 .fan_controller form.changeState div:last-child button,
@@ -242,13 +250,25 @@ button{
     padding: 6px;
     border: none;
     border-radius: 5px;
-    box-shadow: 1px 1px 3px #b1b1b1;
+    box-shadow: 1px 1px 3px #da463c;
     background-color: #df5147;
     color: #fff;
     margin-inline: 10px;
 }
 
+.light_controller form.changeState div:last-child button:hover,
+.fan_controller form.changeState div:last-child button:hover,
+.humidity_controller form.changeState div:last-child button:hover{
+    background-color: #e02518;
+}
+
 form.changeState div:last-child button.changeStatOnBtn{
     background-color: #47df65;
+    box-shadow: 1px 1px 3px #61ee7d;
+
+}
+
+form.changeState div:last-child button.changeStatOnBtn:hover{
+    background-color: #12ec3e;
 }
 
