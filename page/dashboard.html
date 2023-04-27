@@ -89,13 +89,13 @@
                             <span><button class="changeNumBtn">Change</button></span>
                         </div>
                     </form>
-                    <form action="" method="post" class="stat_light_controller changeState">
+                    <!-- <form action="" method="post" class="stat_light_controller changeState">
                         <div class="label">Change the state of the light</div>
                         <div>
                             <button class="changeStatOffBtn">Turn Off</button>
                             <button class="changeStatOnBtn">Turn On</button>
                         </div>
-                    </form>
+                    </form> -->
                 </div>
                 <div class="light_chart chart"><canvas id="lightChart"></canvas></div>
             </div>
@@ -119,19 +119,19 @@
                 </div>
                 <div class="fan_controller">
                     <form action="" method="post" class="temperature_controller changeNum">
-                        <div class="label">Change the temperature in your room</div>
+                        <div class="label">Change the level of the fan</div>
                         <div>
-                            <input type="text" name="temperature_input_box" id="temperature_input_box"> <span>&#176;C</span>
+                            <input type="text" name="temperature_input_box" id="temperature_input_box"> <span>%</span>
                             <span><button class="changeNumBtn">Change</button></span>
                         </div>
                     </form>
-                    <form action="" method="post" class="stat_temperature_controller changeState">
+                    <!-- <form action="" method="post" class="stat_temperature_controller changeState">
                         <div class="label">Change the state of the fan</div>
                         <div>
                             <button class="changeStatOffBtn">Turn Off</button>
                             <button class="changeStatOnBtn">Turn On</button>
                         </div>
-                    </form>
+                    </form> -->
                 </div>
                 <div class="fan_chart chart"><canvas id="fanChart"></canvas></div>
             </div>
@@ -155,19 +155,19 @@
                 </div>
                 <div class="humidity_controller">
                     <form action="" method="post" class="moisture_controller changeNum">
-                        <div class="label">Change the moisture in your room</div>
+                        <div class="label">Change the level of the humidifier</div>
                         <div>
                             <input type="text" name="moisture_input_box" id="moisture_input_box"> <span>%</span>
                             <span><button class="changeNumBtn">Change</button></span>
                         </div>
                     </form>
-                    <form action="" method="post" class="stat_moisture_controller changeState">
+                    <!-- <form action="" method="post" class="stat_moisture_controller changeState">
                         <div class="label">Change the state of the humidity</div>
                         <div>
                             <button class="changeStatOffBtn">Turn Off</button>
                             <button class="changeStatOnBtn">Turn On</button>
                         </div>
-                    </form>
+                    </form> -->
                 </div>
                 <div class="humidity_chart chart"><canvas id="humidityChart"></canvas></div>
             </div>
@@ -178,6 +178,6 @@
     <script src="../script/sidebar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Only -->
-    <script src="../script/dashboard.js"></script>
+    <script type="module" src="../script/dashboard.js"></script>
 </body>
 </html>

@@ -63,7 +63,7 @@
     <!--  -->
     <div class="home_content">
         <div class="text">Setting</div>
-        <div class="main_content">
+        <div class="main_content" id="main-content">
             <div class="form-container">
                 <h3 class="form-tag">
                     Light Setting
@@ -72,11 +72,10 @@
                     <label for="lights">Choose your device:</label>
                     <select name="lights" id="lights" required>
                         <option value="device 1">Device 1</option>
-                        <option value="device 2">Device 2</option>
                     </select>
 
-                    <label for="intensity">Set the intensity of the light (%):</label>
-                    <input type="number" name="intensity" id="intensity" min="10" max="100" required> 
+                    <label for="intensity">Set light intensity (%):</label>
+                    <input type="number" name="intensity" id="intensity" min="0" max="100" required> 
                     
                     <label for="automod1">Auto Mod:</label>
                     <input type="checkbox" name="automod1" id="automod1">
@@ -99,11 +98,10 @@
                     <label for="fans">Choose your device:</label>
                     <select name="fans" id="fans" required>
                         <option value="device 1">Device 1</option>
-                        <option value="device 2">Device 2</option>
                     </select>
 
-                    <label for="temperature">Set the temperature for the fan (&#176;C):</label>
-                    <input type="number" name="temperature" id="temperature" min="25" max="30" required> 
+                    <label for="temperature">Set fan level (%):</label>
+                    <input type="number" name="temperature" id="temperature" min="0" max="100" required> 
                     
                     <label for="automod2">Auto Mod:</label>
                     <input type="checkbox" name="automod2" id="automod2">
@@ -120,17 +118,16 @@
             </div>
             <div class="form-container">
                 <h3 class="form-tag">
-                    Humidity Setting
+                    Humidifier Setting
                 </h3>
                 <form action="" method="post" id="humidity-setting">
                     <label for="humidities">Choose your device:</label>
                     <select name="humidities" id="humidities" required>
                         <option value="device 1">Device 1</option>
-                        <option value="device 2">Device 2</option>
                     </select>
 
-                    <label for="moisture">Set the moisture for the humidity (%):</label>
-                    <input type="number" name="moisture" id="moisture" min="20" max="30" required> 
+                    <label for="moisture">Set humidifier level (%):</label>
+                    <input type="number" name="moisture" id="moisture" min="0" max="100" required> 
                     
                     <label for="automod3">Auto Mod:</label>
                     <input type="checkbox" name="automod3" id="automod3">
@@ -151,6 +148,6 @@
 
     <script src="../script/sidebar.js"></script>
     <!-- Only -->
-    <script src="../script/setting.js"></script>
+    <script type="module" src="../script/setting.js"></script>
 </body>
 </html>
