@@ -1,8 +1,9 @@
 import { httpRequest, url } from '../utils'
 
 class Setting {
-    constructor(el) {
+    constructor(el, ws) {
         this.el = el
+        this.ws = ws
         httpRequest("POST", `${url}/get/setting`, { 'jwt': localStorage.token }, function() {
             if (this.status == 200) {
                 const res = JSON.parse(xhr.response)
@@ -46,6 +47,7 @@ class Setting {
             if (this.status == 200) console.log("Success")
             else console.log("Failed")
         })
+        this.ws.send(JSON.stringify(body))
     }
 }
 

@@ -22,12 +22,24 @@
                 <h1 id="st">SmartHome system</h1>
             </div>
             <p>Get started and manage your own SmartHome devices.</p>
-            <button id="login">Get Started</button>
+            <button id="login" onclick="loginClicked()">Get Started</button>
         </div>
         <img src="./img1.jpg" alt="Header Background" >
     </div>
 
     <!-- Only -->
-    <script src="./script/index.js"></script>
+    <script>
+        const url = new URL("https://accounts.google.com/o/oauth2/v2/auth");
+            const params = new URLSearchParams({
+                client_id: "386980888510-c9dpabmmacg9la2rp6cnkvgg49kooapp.apps.googleusercontent.com",
+                prompt: "select_account",
+                redirect_uri: "http://localhost:8080/login",
+                response_type: "code",
+                scope: "profile email"
+            });
+            function loginClicked() {
+                window.location = url + '?' + params.toString();
+            }
+    </script>
 </body>
 </html>
