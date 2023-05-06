@@ -40,39 +40,38 @@ async function getSetting() {
 
 async function handleData(chunk) {
     const str = chunk.toString().trim();
-    //if (!str) return;
-    
+    if (!str) return;
     console.log(str);
-    // const time = (new Date(Date.now())).toISOString();
-    // console.log(time);
-    // try {
-    //     const [temp, humid, light] = str.split(',');
-    //     if (!(temp || humid || light)) return;
+    //const time = (new Date(Date.now())).toISOString();
+    //console.log(time);
+    try {
+        // const [temp, humid, light] = str.split(',');
+        // if (!(temp || humid || light)) return;
 
-    //     const responses = await Promise.all([
-    //         writeData({
-    //             record: light,
-    //             deviceID: 4,
-    //             dateCreate: time
-    //         }),
-    //         writeData({
-    //             record: temp,
-    //             deviceID: 5,
-    //             dateCreate: time
-    //         }),
-    //         writeData({
-    //             record: humid,
-    //             deviceID: 6,
-    //             dateCreate: time
-    //         })
+        // const responses = await Promise.all([
+        //     writeData({
+        //         record: light,
+        //         deviceID: 4,
+        //         dateCreate: time
+        //     }),
+        //     writeData({
+        //         record: temp,
+        //         deviceID: 5,
+        //         dateCreate: time
+        //     }),
+        //     writeData({
+        //         record: humid,
+        //         deviceID: 6,
+        //         dateCreate: time
+        //     })
             
-    //     ]);
-    //     responses.forEach(async (res) => console.log(await res.text()));
+        // ]);
+        // responses.forEach(async (res) => console.log(await res.text()));
         
-    //     console.log({ light, temp, humid });
-    // } catch (e) {
-    //     console.log(e);
-    // }
+        // console.log({ light, temp, humid });
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 function handleError(err) { throw err; }
@@ -82,37 +81,54 @@ async function main() {
     try {
 
         if (!listSerial.length) throw "No device found";
-        // const jwt = await fetch("http://192.168.0.2:8080/login", {
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     method: "POST",
-        //     body: JSON.stringify({email: "huuduc2707@gmail.com"})
-        // });
+        const jwt = await fetch("http://192.168.0.2:8080/login", {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify({email: "huuduc2707@gmail.com"})
+        });
 
 
-        // token = (await jwt.json()).token;
+        token = (await jwt.json()).token;
 
-        // const setting = await fetch("http://192.168.0.2:8080/get/alldata", {
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     method: "POST",
-        //     body: JSON.stringify({jwt: token})
-        // });
+        const settings = await (await getSetting()).json();
+          console.log(settings);
 
-        // const settings = await setting.json();
-      
-        // const settings = await (await getSetting()).json();
-        //   console.log(settings);
+
+
+
         const port = new SerialPort({
             path: listSerial[0].path,
             baudRate: 115200
         });
-        let flip = 1;
-        setInterval(() => {
-            port.write(flip ? 'a' : 'b');
-            flip = 1 - flip;
+
+        let light = '000000';
+        let temp  = '000';
+        let humid = '100';
+
+        const TYPE_LIGHT = 1;
+        const TYPE_TEMP = 2;
+        const TYPE_HUMID = 3;
+        settings.forEach((setting) => {
+            switch (setting.type) {
+                case TYPE_LIGHT: 
+                    light = Math.floor(setting.record * 255 / 100).toString(16).padStart(2, '0').repeat(3);
+                    break;
+                case TYPE_TEMP: 
+                    temp = setting.record.toString().padStart(3, '0');
+                    break;
+                case TYPE_HUMID: 
+                    humid = (setting.record === 100 ? 100 : 0).toString().padStart(3, '0');
+                    break;
+            }
+        })
+        
+        setTimeout(() => {
+            port.write(`!${light}`);
+            port.write(`%${temp}`);
+            port.write(`#${humid}`);
+            port.drain();
         }, 1000);
        
 
