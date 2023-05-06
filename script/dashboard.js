@@ -80,7 +80,7 @@ new Chart(ctx, {
 // });
 
 import { Current, Data, Display } from './class/dashboard.js'
-import { httpRequest, url } from './utils.js'
+import { url } from './utils.js'
 
 const webSocket = new WebSocket("")
 webSocket.onopen = (e) => {
@@ -91,16 +91,22 @@ const light = new Current()
 const temp = new Current()
 const humid = new Current()
 
-// httpRequest("POST", `${url}/get/device`, { "jwt": localStorage.token }, function() {
-//   if (this.status == 200) {
-//     const res = JSON.parse(xhr.response)
-//     res.forEach(o => {
-//       if (o['type'] == 1) localStorage.lightId = o['deviceId']
-//       else if (o['type'] == 2) localStorage.fanId = o['deviceId']
-//       else if (o['type'] == 3) localStorage.humidId = o['deviceId']
-//     })
-//   }
-// })
+await (async () => {
+  const response = await fetch(`${url}/get/device`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+          "Content-type": "application/json"
+      },
+      body: { "jwt": localStorage.token }
+  })
+  const res = await response.json()
+  res.forEach(o => {
+    if (o['type'] == 1) localStorage.lightId = o['deviceId']
+    else if (o['type'] == 2) localStorage.fanId = o['deviceId']
+    else if (o['type'] == 3) localStorage.humidId = o['deviceId']
+  })
+})()
 
 webSocket.onmessage = (e) => {
   const msg = JSON.parse(e.data)
@@ -115,17 +121,26 @@ const lightData = new Data()
 const tempData = new Data()
 const humidData = new Data()
 
-// httpRequest("POST", `${url}/get/record`, { "jwt": localStorage.token }, function() {
-//   if (this.status == 200) {
-//     const res = JSON.parse(xhr.response)
-//     const light = res.filter(o => { return o['intensity'] != null }).map(o =>  { o['dateCreate'], o['intensity'] })
-//     const temp = res.filter(o => { return o['temperature'] != null }).map(o =>  { o['dateCreate'], o['temperature'] })
-//     const humid = res.filter(o => { return o['humidity'] != null }).map(o =>  { o['dateCreate'], o['humidity'] })
-//     lightData.setData(light)
-//     tempData.setData(temp)
-//     humidData.setData(humid)
-//   }
-// })
+await (async () => {
+  const response = await fetch(`${url}/get/record`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+          "Content-type": "application/json"
+      },
+      body: { "jwt": localStorage.token }
+  })
+  const res = await response.json()
+  const getData = (type) => {
+    return res.filter(o => { return o['type'] == type }).map(o =>  { o['dateCreate'], o['record'] })
+  }
+  const light = getData(1)
+  const temp = getData(2)
+  const humid = getData(3)
+  lightData.setData(light)
+  tempData.setData(temp)
+  humidData.setData(humid)
+})()
 
 const lightDashboard = new Display(document.getElementsByClassName('light_content')[0])
 light.attach(lightDashboard)
