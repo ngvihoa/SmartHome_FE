@@ -38,37 +38,21 @@ async function getSetting() {
         });
 }
 
+let time;
+let temp, humid, light;
+
 async function handleData(chunk) {
     const str = chunk.toString().trim();
     if (!str) return;
     console.log(str);
-    //const time = (new Date(Date.now())).toISOString();
-    //console.log(time);
     try {
-        // const [temp, humid, light] = str.split(',');
-        // if (!(temp || humid || light)) return;
-
-        // const responses = await Promise.all([
-        //     writeData({
-        //         record: light,
-        //         deviceID: 4,
-        //         dateCreate: time
-        //     }),
-        //     writeData({
-        //         record: temp,
-        //         deviceID: 5,
-        //         dateCreate: time
-        //     }),
-        //     writeData({
-        //         record: humid,
-        //         deviceID: 6,
-        //         dateCreate: time
-        //     })
-            
-        // ]);
-        // responses.forEach(async (res) => console.log(await res.text()));
+        const [t, h, l] = str.split(',');
+        if (!(t || h || l)) return;
+        time = (new Date(Date.now())).toISOString();
+        [time, temp, humid, light] = [ti, t, h, l]
+     
         
-        // console.log({ light, temp, humid });
+        console.log({ light, temp, humid });
     } catch (e) {
         console.log(e);
     }
@@ -140,6 +124,27 @@ async function main() {
 
         port.on("data", handleData);
         port.on("error", handleError);
+        setInterval(async () => {
+            const responses = await Promise.all([
+                writeData({
+                    record: light,
+                    deviceID: 4,
+                    dateCreate: time
+                }),
+                writeData({
+                    record: temp,
+                    deviceID: 5,
+                    dateCreate: time
+                }),
+                writeData({
+                    record: humid,
+                    deviceID: 6,
+                    dateCreate: time
+                })
+                
+            ]);
+            responses.forEach(async (res) => console.log(await res.text()));
+        }, 5000);
     } catch (e) { console.log(e); }
 }
 
