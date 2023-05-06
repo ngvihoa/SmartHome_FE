@@ -31,5 +31,3 @@ document.getElementById('gen-report-req').addEventListener("submit", async e => 
     const res = [lightReport.generate_report(), tempReport.generate_report(), humidReport.generate_report()]
     alert(JSON.stringify(res))
 })
-
-

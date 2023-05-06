@@ -11,9 +11,9 @@ class Setting {
                 let fan = []
                 let humid = []
                 for (let i in res) {
-                    if (res[i]['type'] == 1) light = [res[i]['intensity'], res[i]['automod'], res[i]['onTime'], res[i]['offTime']]
-                    else if (res[i]['type'] == 2) fan = [res[i]['temperature'], res[i]['automod'], res[i]['onTime'], res[i]['offTime']]
-                    else if (res[i]['type'] == 3) humid = [res[i]['humidity'], res[i]['automod'], res[i]['onTime'], res[i]['offTime']]
+                    if (res[i]['type'] == 1) light = [res[i]['record'], res[i]['automod'], res[i]['onTime'], res[i]['offTime']]
+                    else if (res[i]['type'] == 2) fan = [res[i]['record'], res[i]['automod'], res[i]['onTime'], res[i]['offTime']]
+                    else if (res[i]['type'] == 3) humid = [res[i]['record'], res[i]['automod'], res[i]['onTime'], res[i]['offTime']]
                 }
                 this.initValue('light-setting', light)
                 this.initValue('fan-setting', fan)
@@ -38,7 +38,7 @@ class Setting {
         const formElement = Array.from(form)
         const body = {
             'deviceId': form.id == 'light-setting' ? localStorage.lightId : form.id == 'fan-setting' ? localStorage.fanId : localStorage.humidId,
-            'level': formElement[1].value,
+            'record': formElement[1].value,
             'automod': formElement[2].checked,
             'onTime': formElement[3].value,
             'offTime': formElement[4].value
