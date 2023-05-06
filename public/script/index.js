@@ -1,13 +1,14 @@
 
-const imgg = document.querySelectorAll("#imgg");
+// const imgg = document.querySelector("#imgg");
 
-const observer = new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{
-        entry.target.classList.toggle('float', entry.isIntersecting)
-    })
-})
+// const observer = new IntersectionObserver(entries=>{
+//     entries.forEach(entry=>{
+//         entry.target.classList.add('float', entry.isIntersecting);
+//         if(entry.isIntersecting) {
+//             observer.unobserve(entry.target);
+//             entry.target.classList.remove('float', entry.isIntersecting);
+//         }
+//     })
+// });
 
-imgg.forEach(img=>{
-
-    observer.observe(img)
-})
+// observer.observe(imgg);
