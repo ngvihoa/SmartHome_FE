@@ -79,7 +79,7 @@
 }
 
 .head-text .txt-con h1#st:before{
-    animation: animate 1s 0.1s steps(12) normal forwards;
+    animation: animate 1.5s 0.1s steps(12) normal forwards;
 }
 
 @keyframes animate {
@@ -113,15 +113,25 @@ img{
     width: 600px;
     height: 400px;
     box-shadow: -2px 2px 40px #5c5c5cb8;
-    animation: float 1.5s normal forwards;
+    /* animation: float 1.5s normal forwards; */
+}
+
+.float{
+    animation: float 2s normal forwards;
 }
 
 @keyframes float {
-    from{
-        margin-top: -200px; 
+    0%{
+        opacity: 0;
+        transform: translateY(-100px); 
     }
-    to{
-        margin-top: 0px;
+    50%{
+        opacity: 1;
+        transform: translateY(5px);         
+    }
+    100%{
+        opacity: 1;
+        transform: translateY(0); 
     }
 }
 
