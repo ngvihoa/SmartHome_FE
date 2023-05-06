@@ -13,8 +13,8 @@ obss.forEach(obs=>{
     observer.observe(obs)
 })
 
-//-----------------------------------------
 localStorage.token = cookieToJSON(document.cookie).cookie
+//-----------------------------------------
 
 const ctx = document.getElementById('lightChart');
 
@@ -82,10 +82,6 @@ new Chart(ctx, {
 // }
 // });
 
-const webSocket = new WebSocket("")
-webSocket.onopen = (e) => {
-  console.log(e)
-}
 
 const light = new Current()
 const temp = new Current()
@@ -98,49 +94,62 @@ await (async () => {
       headers: {
           "Content-type": "application/json"
       },
-      body: { "jwt": localStorage.token }
+      body: JSON.stringify({ "jwt": localStorage.token })
   })
   const res = await response.json()
   res.forEach(o => {
-    if (o['type'] == 1) localStorage.lightId = o['deviceId']
-    else if (o['type'] == 2) localStorage.fanId = o['deviceId']
-    else if (o['type'] == 3) localStorage.humidId = o['deviceId']
+    if (o['type'] == 1) localStorage.lightId = o['id']
+    else if (o['type'] == 2) localStorage.fanId = o['id']
+    else if (o['type'] == 3) localStorage.humidId = o['id']
+
+    document.getElementById('light_id').innerText = localStorage.lightId;
+    document.getElementById('fan_id').innerText = localStorage.fanId;
+    document.getElementById('humid_id').innerText = localStorage.humidId;
+    // document.querySelector('.fan_controller > form > changeNumBtn').dataset.deviceId = localStorage.fanId
+    // document.querySelector('.humid_controller > form > changeNumBtn').dataset.deviceId = localStorage.humidId
   })
 })()
 
-webSocket.onmessage = (e) => {
-  const msg = JSON.parse(e.data)
-  for (let i = 0; i < msg.length; i++) {
-    if (msg[i]['type'] == 'light') light.setCurrentStatus(msg[i]['intensity'], msg[i]['deviceStatus'])
-    else if (msg[i]['type'] == 'temperature') temp.setCurrentStatus(msg[i]['temperature'], msg[i]['deviceStatus'])
-    else if (msg[i]['type'] == 'humidity') humid.setCurrentStatus(msg[i]['humidity'], msg[i]['deviceStatus'])
-  }
-}
+// webSocket.onmessage = (e) => {
+//   const msg = JSON.parse(e.data)
+//   for (let i = 0; i < msg.length; i++) {
+//     if (msg[i]['type'] == 'light') light.setCurrentStatus(msg[i]['intensity'], msg[i]['deviceStatus'])
+//     else if (msg[i]['type'] == 'temperature') temp.setCurrentStatus(msg[i]['temperature'], msg[i]['deviceStatus'])
+//     else if (msg[i]['type'] == 'humidity') humid.setCurrentStatus(msg[i]['humidity'], msg[i]['deviceStatus'])
+//   }
+// }
 
 const lightData = new Data()
 const tempData = new Data()
 const humidData = new Data()
 
-await (async () => {
-  const response = await fetch(`${url}/get/record`, {
+const getDeviceId = async () => {
+  const response = await fetch(`${url}/get/data`, {
       method: "POST",
       mode: "cors",
       headers: {
           "Content-type": "application/json"
       },
-      body: { "jwt": localStorage.token }
+      body: JSON.stringify({ "jwt": localStorage.token })
   })
-  const res = await response.json()
-  const getData = (type) => {
-    return res.filter(o => { return o['type'] == type }).map(o =>  { o['dateCreate'], o['record'] })
+  if(response.status == 200) {
+    const res = await response.json()
+    const getData = (type) => {
+      return res.filter(o => { return o['type'] == type }).map(o => { o['dateCreate'], o['record'] })
+    }
+    const light = getData(1)
+    const temp = getData(2)
+    const humid = getData(3)
+    lightData.setData(light)
+    tempData.setData(temp)
+    humidData.setData(humid)
   }
-  const light = getData(1)
-  const temp = getData(2)
-  const humid = getData(3)
-  lightData.setData(light)
-  tempData.setData(temp)
-  humidData.setData(humid)
-})()
+  else {
+    console.log('err')
+  }
+}
+
+await getDeviceId()
 
 const lightDashboard = new Display(document.getElementsByClassName('light_content')[0])
 light.attach(lightDashboard)
@@ -158,12 +167,37 @@ const lightForm = document.querySelector('.light_controller > form')
 const fanForm = document.querySelector('.fan_controller > form')
 const humidForm = document.querySelector('.humidity_controller > form')
 
-lightForm.addEventListener('submit', handleSubmitStateChange(e, localStorage.lightId))
-fanForm.addEventListener('submit', handleSubmitStateChange(e, localStorage.fanId))
-humidForm.addEventListener('submit', handleSubmitStateChange(e, localStorage.humidId))
+lightForm.addEventListener('submit', handleSubmitStateChange)
+fanForm.addEventListener('submit', handleSubmitStateChange)
+humidForm.addEventListener('submit', handleSubmitStateChange)
 
-function handleSubmitStateChange(e, deviceId) {
+
+
+
+async function handleSubmitStateChange(e) {
+  console.log(e);
+
 	e.preventDefault()
 	const val = e.target.querySelector("input[type='text']").value
-	webSocket.send(JSON.stringify({ deviceId, deviceStatus: val }))
+
+  const time = (new Date(Date.now())).toISOString();
+  const json = JSON.stringify({ "jwt": localStorage.token, 'deviceID': e.target.querySelector('p').innerText, 'record': val, 'dateCreate': time });
+  console.log(json);
+	await fetch('http://localhost:8080/write/setting', {
+      method: "POST",
+      mode: "cors",
+      headers: {
+          "Content-type": "application/json"
+      },
+      body: json
+  })
+  await fetch(`${url}/write/setting`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+          "Content-type": "application/json"
+      },
+      body: json
+  })
+  // console.log(12)
 }

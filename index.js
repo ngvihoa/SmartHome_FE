@@ -49,7 +49,7 @@ async function handleData(chunk) {
         const [t, h, l] = str.split(',');
         if (!(t || h || l)) return;
         time = (new Date(Date.now())).toISOString();
-        [time, temp, humid, light] = [ti, t, h, l]
+        [temp, humid, light] = [t, h, l]
      
         
         console.log({ light, temp, humid });
@@ -59,6 +59,16 @@ async function handleData(chunk) {
 }
 
 function handleError(err) { throw err; }
+
+function getSecondsFromTime(time) {
+    const [hour, minute, second] = time.split(':').map(v => parseInt(v));
+    return hour * 3600 + minute * 60 + second;
+}
+
+function getCurrentTime() {
+    const date = new Date(Date.now());
+    return date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds();
+}
 
 const TYPE_LIGHT = 1;
 const TYPE_TEMP = 2;
@@ -95,21 +105,64 @@ async function main() {
         let light = '000000';
         let temp  = '000';
         let humid = '100';
-
         
         settings.forEach((setting) => {
+            const onTime = getSecondsFromTime(setting.onTime);
+            const offTime = getSecondsFromTime(setting.offTime);
+
+            
+            let lastTime = getCurrentTime();
             switch (setting.type) {
                 case TYPE_LIGHT: 
                     deviceType[setting.deviceId] = TYPE_LIGHT;
                     light = Math.floor(setting.record * 255 / 100).toString(16).padStart(2, '0').repeat(3);
+                            
+                    if (onTime !== offTime) {
+                        setInterval(() => {
+                            const currentTime = getCurrentTime();
+                            if (currentTime >= onTime && lastTime <= onTime) {
+                                port.write('!' + light);
+                            }
+                            else if (currentTime >= offTime && lastTime <= offTime) {
+                                port.write('!000000');
+                            }
+                            lastTime = currentTime;
+                        }, 1000);
+                    }
                     break;
                 case TYPE_TEMP:
                     deviceType[setting.deviceId] = TYPE_TEMP;
                     temp = setting.record.toString().padStart(3, '0');
+                    
+                    if (onTime !== offTime) {
+                        setInterval(() => {
+                            const currentTime = getCurrentTime();
+                            if (currentTime >= onTime && lastTime <= onTime) {
+                                port.write('%' + temp);
+                            }
+                            else if (currentTime >= offTime && lastTime <= offTime) {
+                                port.write('%000');
+                            }
+                            lastTime = currentTime;
+                        }, 1000);
+                    }
                     break;
                 case TYPE_HUMID:
                     deviceType[setting.deviceId] = TYPE_HUMID;
                     humid = (setting.record === 100 ? 100 : 0).toString().padStart(3, '0');
+                    
+                    if (onTime !== offTime) {
+                        setInterval(() => {
+                            const currentTime = getCurrentTime();
+                            if (currentTime >= onTime && lastTime <= onTime) {
+                                port.write('#' + humid);
+                            }
+                            else if (currentTime >= offTime && lastTime <= offTime) {
+                                port.write('#000');
+                            }
+                            lastTime = currentTime;
+                        }, 1000);
+                    }
                     break;
             }
         })
@@ -144,7 +197,7 @@ async function main() {
                 
             ]);
             responses.forEach(async (res) => console.log(await res.text()));
-        }, 5000);
+        }, 10000);
     } catch (e) { console.log(e); }
 }
 
@@ -198,18 +251,18 @@ app.get('/login', async (req, res) => {
 app.post('/write/setting', (req, res) => {
     
     console.log(req.body);
-    const {deviceId, record} = req.body;
-    switch (deviceType[deviceId]) {
+    const {deviceID, record} = req.body;
+    switch (deviceType[deviceID]) {
         case TYPE_LIGHT: 
-            port.write('!' + Math.floor(record * 255 / 100).toString(16).padStart(2, '0').repeat(3));
+            port.write('!' + Math.floor(parseInt(record) * 255 / 100).toString(16).padStart(2, '0').repeat(3));
             port.drain();
             break;
         case TYPE_TEMP:
-            port.write('%' + record.toString().padStart(3, '0'));
+            port.write('%' + parseInt(record).toString().padStart(3, '0'));
             port.drain();
             break;
         case TYPE_HUMID:
-            port.write('#' + (setting.record === 100 ? 100 : 0).toString().padStart(3, '0'));
+            port.write('#' + (parseInt(record) === 100 ? 100 : 0).toString().padStart(3, '0'));
             port.drain();
             break;
     }
