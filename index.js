@@ -162,22 +162,9 @@ app.get('/login', async (req, res) => {
     const cookie = jwt.sign({ userEmail: info.email }, JWT_SECRET);
     res.cookie("cookie", cookie, {
         maxAge: 3600 * 1000,
-        path: "/"
-    }).redirect("data");
+        path: "page"
+    }).redirect("page/dashboard.html");
 
 });
-app.get('/data', (req, res) => {
-    try {
-        const token = req.cookies['cookie'];
-        if (token) {
-            const str = jwt.verify(token, JWT_SECRET);
-            console.log(str);
-            res.end("granted " + str.userEmail);
-        }
-        else throw "error";
-    } catch (e) {
-        res.end("error");
-    }
-})
 
 app.listen(8080, main);
