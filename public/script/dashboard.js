@@ -1,3 +1,6 @@
+import { Current, Data, Display } from './class/dashboard.js'
+import { url, cookieToJSON } from './utils.js'
+
 const obss = document.querySelectorAll(".obs");
 
 const observer = new IntersectionObserver(entries=>{
@@ -7,16 +10,13 @@ const observer = new IntersectionObserver(entries=>{
 })
 
 obss.forEach(obs=>{
-
     observer.observe(obs)
 })
 
 //-----------------------------------------
+localStorage.token = cookieToJSON(document.cookie).cookie
 
-const user_email = document.getElementById('user_email');
 const ctx = document.getElementById('lightChart');
-
-user_email.innerText = JSON.parse(atob(document.cookie.split('=')[1].split('.')[1])).userEmail.split('@')[0];
 
 new Chart(ctx, {
   type: 'line',
@@ -81,9 +81,6 @@ new Chart(ctx, {
 //     }
 // }
 // });
-
-import { Current, Data, Display } from './class/dashboard.js'
-import { url } from './utils.js'
 
 const webSocket = new WebSocket("")
 webSocket.onopen = (e) => {

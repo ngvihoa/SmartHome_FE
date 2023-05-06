@@ -8,4 +8,13 @@ function httpRequest(method, url, request_body, func) {
 
 const url = ''
 
-export { httpRequest, url }
+function cookieToJSON(cookie) {
+    const res = {}
+    cookie.split('; ').forEach(pair => {
+        pair = pair.split('=')
+        res[pair[0]] = pair[1]
+    })
+    return res    
+}
+
+export { httpRequest, url, cookieToJSON }

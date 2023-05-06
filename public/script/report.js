@@ -1,4 +1,3 @@
-
 // let a = Date();
 // console.log(a);
 import { Report } from './class/report.js'
