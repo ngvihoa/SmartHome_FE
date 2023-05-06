@@ -13,7 +13,10 @@ obss.forEach(obs=>{
 
 //-----------------------------------------
 
+const user_email = document.getElementById('user_email');
 const ctx = document.getElementById('lightChart');
+
+user_email.innerText = JSON.parse(atob(document.cookie.split('=')[1].split('.')[1])).userEmail.split('@')[0];
 
 new Chart(ctx, {
   type: 'line',
