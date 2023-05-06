@@ -76,6 +76,11 @@ async function handleData(chunk) {
 
 function handleError(err) { throw err; }
 
+const TYPE_LIGHT = 1;
+const TYPE_TEMP = 2;
+const TYPE_HUMID = 3;
+const deviceType = {};
+let port;
 async function main() {
     const listSerial = (await SerialPort.list()).filter(v => v.vendorId === "1A86" && v.productId === "7523");
     try {
@@ -98,7 +103,7 @@ async function main() {
 
 
 
-        const port = new SerialPort({
+        port = new SerialPort({
             path: listSerial[0].path,
             baudRate: 115200
         });
@@ -107,18 +112,19 @@ async function main() {
         let temp  = '000';
         let humid = '100';
 
-        const TYPE_LIGHT = 1;
-        const TYPE_TEMP = 2;
-        const TYPE_HUMID = 3;
+        
         settings.forEach((setting) => {
             switch (setting.type) {
                 case TYPE_LIGHT: 
+                    deviceType[setting.deviceId] = TYPE_LIGHT;
                     light = Math.floor(setting.record * 255 / 100).toString(16).padStart(2, '0').repeat(3);
                     break;
-                case TYPE_TEMP: 
+                case TYPE_TEMP:
+                    deviceType[setting.deviceId] = TYPE_TEMP;
                     temp = setting.record.toString().padStart(3, '0');
                     break;
-                case TYPE_HUMID: 
+                case TYPE_HUMID:
+                    deviceType[setting.deviceId] = TYPE_HUMID;
                     humid = (setting.record === 100 ? 100 : 0).toString().padStart(3, '0');
                     break;
             }
@@ -139,6 +145,7 @@ async function main() {
 
 app.use(express.static('./public'));
 app.use(cookieParser());
+app.use(express.json());
 const JWT_SECRET = "doandanganh";
 
 app.get('/log', (req, res) => {
@@ -181,6 +188,27 @@ app.get('/login', async (req, res) => {
         path: "page"
     }).redirect("page/dashboard.html");
 
+});
+
+app.post('/write/setting', (req, res) => {
+    
+    console.log(req.body);
+    const {deviceId, record} = req.body;
+    switch (deviceType[deviceId]) {
+        case TYPE_LIGHT: 
+            port.write('!' + Math.floor(record * 255 / 100).toString(16).padStart(2, '0').repeat(3));
+            port.drain();
+            break;
+        case TYPE_TEMP:
+            port.write('%' + record.toString().padStart(3, '0'));
+            port.drain();
+            break;
+        case TYPE_HUMID:
+            port.write('#' + (setting.record === 100 ? 100 : 0).toString().padStart(3, '0'));
+            port.drain();
+            break;
+    }
+    res.end("OK");
 });
 
 app.listen(8080, main);
