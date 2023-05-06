@@ -1,3 +1,18 @@
+const obss = document.querySelectorAll(".obs");
+
+const observer = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+        entry.target.classList.toggle('dfly', entry.isIntersecting)
+    })
+})
+
+obss.forEach(obs=>{
+
+    observer.observe(obs)
+})
+
+//-----------------------------------------
+
 const ctx = document.getElementById('lightChart');
 
 new Chart(ctx, {

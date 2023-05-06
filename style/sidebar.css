@@ -7,7 +7,7 @@
     background: #7385E0;
     padding: 6px 14px;
     transition: all 0.5s ease;
-    z-index: 100;
+    z-index: 10000;
 }
 
 .sidebar.active{
@@ -201,4 +201,20 @@
 .sidebar.active .user #log_out{
     left: 88%;
     background: none;
+}
+
+
+.current{
+    background: #fff;
+}
+
+.current i{
+    color: #4a4a4a;
+}
+
+@media (width < 700px) {
+    
+.sidebar.active{
+    width: 100%;
+}
 }

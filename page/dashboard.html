@@ -8,12 +8,12 @@
     <title>Smart House | Dash board</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../style/style.css">
-    <link rel="stylesheet" href="../style/sidebar.css">
     <!-- Only -->
     <link rel="stylesheet" href="../style/dashboard.css">
+    <link rel="stylesheet" href="../style/sidebar.css">
 </head>
 <body>
-    <div class="sidebar">
+    <aside class="sidebar">
         <div class="logo_content">
             <div class="logo">
                 <i class='bx bxs-bot'></i>
@@ -58,30 +58,32 @@
                 <i class='bx bx-log-out' id="log_out"></i>
             </div>
         </div>
-    </div>
+    </aside>
     <!--  -->
     <div class="home_content">
         <div class="text">DashBoard</div>
         <div class="main_content">
+            <div class="header-section"><strong>Light Statistic Overview</strong><hr></div>
             <div class="light_content">
-                <div class="light_intensity">
-                    <div class="intensity_content">
-                        <i class='bx bxs-bulb' ></i>
-                        <div class="intensity"><span class="num">80</span><span>%</span></div>
-                    </div>
-                    <div class="stat_light_content stat_content">
-                        <span>State: </span>
-                        <div class="stat stat_on">
-                            <i class='bx bxs-check-circle'></i>
-                            <span>ON</span>
+                <div>
+                    <div class="light_intensity">
+                        <div class="intensity_content">
+                            <i class='bx bxs-bulb' ></i>
+                            <div class="intensity"><span class="num">80</span><span>%</span></div>
                         </div>
-                        <div class="stat stat_off active">
-                            <i class='bx bxs-minus-circle' ></i>
-                            <span>OFF</span>
+                        <div class="stat_light_content stat_content">
+                            <span>State: </span>
+                            <div class="stat stat_on">
+                                <i class='bx bxs-check-circle'></i>
+                                <span>ON</span>
+                            </div>
+                            <div class="stat stat_off active">
+                                <i class='bx bxs-minus-circle' ></i>
+                                <span>OFF</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="light_controller">
+                    <div class="light_controller">
                     <form action="" method="post" class="intensity_controller changeNum">
                         <div class="label">Change the intensity of the light</div>
                         <div>
@@ -96,78 +98,85 @@
                             <button class="changeStatOnBtn">Turn On</button>
                         </div>
                     </form> -->
+                    </div>
                 </div>
                 <div class="light_chart chart"><canvas id="lightChart"></canvas></div>
             </div>
-            <div class="fan_content">
-                <div class="fan_temperature">
-                    <div class="temperature_content">
-                        <i class='bx bxs-thermometer' ></i>
-                        <div class="temperature"><span class="num">28</span><span>&#176;C</span></div>
+            <div class="header-section"><strong>Fan Statistic Overview</strong><hr></div>
+            <div class="fan_content obs">
+                <div>
+                    <div class="fan_temperature">
+                        <div class="temperature_content">
+                            <i class='bx bxs-thermometer' ></i>
+                            <div class="temperature"><span class="num">28</span><span>&#176;C</span></div>
+                        </div>
+                        <div class="stat_temperature_content stat_content">
+                            <span>State: </span>
+                            <div class="stat stat_on active">
+                                <i class='bx bxs-check-circle'></i>
+                                <span>ON</span>
+                            </div>
+                            <div class="stat stat_off">
+                                <i class='bx bxs-minus-circle' ></i>
+                                <span>OFF</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat_temperature_content stat_content">
-                        <span>State: </span>
-                        <div class="stat stat_on active">
-                            <i class='bx bxs-check-circle'></i>
-                            <span>ON</span>
-                        </div>
-                        <div class="stat stat_off">
-                            <i class='bx bxs-minus-circle' ></i>
-                            <span>OFF</span>
-                        </div>
+                    <div class="fan_controller">
+                        <form action="" method="post" class="temperature_controller changeNum">
+                            <div class="label">Change the level of the fan</div>
+                            <div>
+                                <input type="text" name="temperature_input_box" id="temperature_input_box"> <span>%</span>
+                                <span><button class="changeNumBtn">Change</button></span>
+                            </div>
+                        </form>
+                        <!-- <form action="" method="post" class="stat_temperature_controller changeState">
+                            <div class="label">Change the state of the fan</div>
+                            <div>
+                                <button class="changeStatOffBtn">Turn Off</button>
+                                <button class="changeStatOnBtn">Turn On</button>
+                            </div>
+                        </form> -->
                     </div>
-                </div>
-                <div class="fan_controller">
-                    <form action="" method="post" class="temperature_controller changeNum">
-                        <div class="label">Change the level of the fan</div>
-                        <div>
-                            <input type="text" name="temperature_input_box" id="temperature_input_box"> <span>%</span>
-                            <span><button class="changeNumBtn">Change</button></span>
-                        </div>
-                    </form>
-                    <!-- <form action="" method="post" class="stat_temperature_controller changeState">
-                        <div class="label">Change the state of the fan</div>
-                        <div>
-                            <button class="changeStatOffBtn">Turn Off</button>
-                            <button class="changeStatOnBtn">Turn On</button>
-                        </div>
-                    </form> -->
                 </div>
                 <div class="fan_chart chart"><canvas id="fanChart"></canvas></div>
             </div>
-            <div class="humidity_content">
-                <div class="humidity_moisture">
-                    <div class="moisture_content">
-                        <i class='bx bxs-droplet' ></i>
-                        <div class="moisture"><span class="num">30</span><span>%</span></div>
+            <div class="header-section"><strong>Humidity Statistic Overview</strong><hr></div>
+            <div class="humidity_content obs">
+                <div>
+                    <div class="humidity_moisture">
+                        <div class="moisture_content">
+                            <i class='bx bxs-droplet' ></i>
+                            <div class="moisture"><span class="num">30</span><span>%</span></div>
+                        </div>
+                        <div class="stat_moisture_content stat_content ">
+                            <span>State: </span>
+                            <div class="stat stat_on active">
+                                <i class='bx bxs-check-circle'></i>
+                                <span>ON</span>
+                            </div>
+                            <div class="stat stat_off">
+                                <i class='bx bxs-minus-circle' ></i>
+                                <span>OFF</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat_moisture_content stat_content ">
-                        <span>State: </span>
-                        <div class="stat stat_on active">
-                            <i class='bx bxs-check-circle'></i>
-                            <span>ON</span>
-                        </div>
-                        <div class="stat stat_off">
-                            <i class='bx bxs-minus-circle' ></i>
-                            <span>OFF</span>
-                        </div>
+                    <div class="humidity_controller">
+                        <form action="" method="post" class="moisture_controller changeNum">
+                            <div class="label">Change the level of the humidifier</div>
+                            <div>
+                                <input type="text" name="moisture_input_box" id="moisture_input_box"> <span>%</span>
+                                <span><button class="changeNumBtn">Change</button></span>
+                            </div>
+                        </form>
+                        <!-- <form action="" method="post" class="stat_moisture_controller changeState">
+                            <div class="label">Change the state of the humidity</div>
+                            <div>
+                                <button class="changeStatOffBtn">Turn Off</button>
+                                <button class="changeStatOnBtn">Turn On</button>
+                            </div>
+                        </form> -->
                     </div>
-                </div>
-                <div class="humidity_controller">
-                    <form action="" method="post" class="moisture_controller changeNum">
-                        <div class="label">Change the level of the humidifier</div>
-                        <div>
-                            <input type="text" name="moisture_input_box" id="moisture_input_box"> <span>%</span>
-                            <span><button class="changeNumBtn">Change</button></span>
-                        </div>
-                    </form>
-                    <!-- <form action="" method="post" class="stat_moisture_controller changeState">
-                        <div class="label">Change the state of the humidity</div>
-                        <div>
-                            <button class="changeStatOffBtn">Turn Off</button>
-                            <button class="changeStatOnBtn">Turn On</button>
-                        </div>
-                    </form> -->
                 </div>
                 <div class="humidity_chart chart"><canvas id="humidityChart"></canvas></div>
             </div>

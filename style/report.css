@@ -8,8 +8,9 @@ button{
 
 .home_content .main_content{
     width: 100%;
-    height: calc(100% - 50px);
+    /* height: calc(100% - 50px); */
     display: flex;
+    padding: 0 100px;
 }
 
 
@@ -92,13 +93,14 @@ button{
 
 .main_content .sub_content{
     /* border: 1px solid green; */
-    width: 70%;
-
+    /* width: 70%; */
+    width: 100%;;
 }
 
 .main_content .sub_content{
     /* border: 1px solid red; */
-    width: calc(100% - 40%);
+    /* width: calc(100% - 40%); */
+    width: 100%;
     padding: 10px 20px;
     display: flex;
     flex-direction: column;
@@ -110,7 +112,7 @@ button{
     font-weight: 500;
     font-size: 1.3rem;
     color: #7385E0;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 
 }
 
@@ -120,6 +122,8 @@ button{
 
 .sub_content .statistic-area{
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     gap: 20px;
@@ -127,7 +131,7 @@ button{
 
 .statistic-area .statistic-box{
     position: relative;
-    height: 140px;
+    height: 120px;
     width: 300px;
     /* border: 5px solid #7385E0; */
     border-radius: 10px;
@@ -143,6 +147,7 @@ button{
     font-size: 2rem;
     text-align: center;
     background-color: #fff;
+    flex: 1 0.5 20%;
 }
 
 .statistic-area .statistic-box div:first-child{
@@ -165,9 +170,13 @@ button{
 
 .report-area .report-topic ul{
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 10px;
     list-style: none;
     padding: 5px 0;
+    width: 100%;
+    justify-content: flex-start;
 }
 
 .report-area .report-topic ul li{
@@ -176,6 +185,10 @@ button{
     border-radius: 10px;
     cursor: pointer;
     transition: ease 0.3s;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .report-area .report-topic ul li:hover{
@@ -198,7 +211,7 @@ button{
 
 .report-form .setting-report{
     width: 100%;
-    height: 120px;
+    padding: 35px 0;
     background-color: #fff;
     /* border: 1px solid black; */
     border-radius: 10px;
@@ -209,7 +222,8 @@ button{
     width: 100%;
     height: 100%;
     display: flex;
-    padding: 40px;
+    flex-direction: row;
+    padding: 0px 40px;
     justify-content: space-around;
     align-items: center;
 }
@@ -222,9 +236,11 @@ button{
 
 .setting-report form .from-date input,
 .setting-report form .to-date input{
-    padding: 3px 5px;
+    padding: 5px 10px;
     border-radius: 10px;
     border: 1px solid #384fc6;
+    outline: none;
+    font-size: 1rem;
 }
 
 .setting-report form button{
@@ -328,5 +344,43 @@ td button:hover{
     color: #fff;
     transition: linear 300ms;
     box-shadow: 2px 2px 4px #8796dd;
+
+}
+
+@media (width < 1000px) {
+    .home_content .main_content{
+        padding: 0;
+}
+.sub_content .statistic-area{
+
+    flex-direction: column;
+}
+.report-area .report-topic ul li{
+    min-width: 150px;
+    flex: 1;
+}
+.setting-report form{
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 20px;
+}
+
+.setting-report form div{
+    display: flex;
+    flex-direction: column;
+    width:100%;
+}
+.setting-report form div label{
+    font-size: 1rem;
+}
+.setting-report form button{
+    width: 100%;
+    margin-top: 10px;
+}
+
+.report-form .result-report{
+    height: 300px;
+    padding-inline: 30px;
+}
 
 }
