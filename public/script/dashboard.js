@@ -167,3 +167,4 @@ function handleSubmitStateChange(e, deviceId) {
 	const val = e.target.querySelector("input[type='text']").value
 	webSocket.send(JSON.stringify({ deviceId, deviceStatus: val }))
 }
+
