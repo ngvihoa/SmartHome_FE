@@ -7,9 +7,13 @@ class Current extends Subject {
         this.deviceStatus = 0
     }
     
-    setCurrentStatus(current, deviceStatus) {
-        this.current = current
+    setCurrentStatus(deviceStatus) {
         this.deviceStatus = deviceStatus
+        this.notify()
+    }
+
+    setCurrent(current) {
+        this.current = current
         this.notify()
     }
 }
@@ -39,12 +43,12 @@ class Display extends Observer {
             if (subject.deviceStatus > 0) {
                 stateDisplay.classList.replace('stat_off', 'stat_on')
                 stateDisplay.querySelector('i').classList.replace('bxs-minus-circle', 'bxs-check-circle')
-                stateDisplay.querySelector('span').innerText = 'ON'
+                stateDisplay.querySelector('span').innerText = subject.deviceStatus.toString() + '%'
             }
             else {
                 stateDisplay.classList.replace('stat_on', 'stat_off')
                 stateDisplay.querySelector('i').classList.replace('bxs-check-circle', 'bxs-minus-circle')
-                stateDisplay.querySelector('span').innerText = 'OFF'
+                stateDisplay.querySelector('span').innerText = '0%'
             }
         }
         // else if (subject instanceof Data)

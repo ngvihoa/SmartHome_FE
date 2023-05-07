@@ -16,6 +16,10 @@ obss.forEach(obs=>{
 localStorage.token = cookieToJSON(document.cookie).cookie
 //-----------------------------------------
 
+const TYPE_LIGHT = 1;
+const TYPE_TEMP = 2;
+const TYPE_HUMID = 3;
+
 const ctx = document.getElementById('lightChart');
 
 new Chart(ctx, {
@@ -87,6 +91,10 @@ const light = new Current()
 const temp = new Current()
 const humid = new Current()
 
+const lightData = new Data()
+const tempData = new Data()
+const humidData = new Data()
+
 await (async () => {
   const response = await fetch(`${url}/get/device`, {
       method: "POST",
@@ -105,23 +113,8 @@ await (async () => {
     document.getElementById('light_id').innerText = localStorage.lightId;
     document.getElementById('fan_id').innerText = localStorage.fanId;
     document.getElementById('humid_id').innerText = localStorage.humidId;
-    // document.querySelector('.fan_controller > form > changeNumBtn').dataset.deviceId = localStorage.fanId
-    // document.querySelector('.humid_controller > form > changeNumBtn').dataset.deviceId = localStorage.humidId
   })
 })()
-
-// webSocket.onmessage = (e) => {
-//   const msg = JSON.parse(e.data)
-//   for (let i = 0; i < msg.length; i++) {
-//     if (msg[i]['type'] == 'light') light.setCurrentStatus(msg[i]['intensity'], msg[i]['deviceStatus'])
-//     else if (msg[i]['type'] == 'temperature') temp.setCurrentStatus(msg[i]['temperature'], msg[i]['deviceStatus'])
-//     else if (msg[i]['type'] == 'humidity') humid.setCurrentStatus(msg[i]['humidity'], msg[i]['deviceStatus'])
-//   }
-// }
-
-const lightData = new Data()
-const tempData = new Data()
-const humidData = new Data()
 
 const getDeviceId = async () => {
   const response = await fetch(`${url}/get/data`, {
@@ -181,7 +174,8 @@ async function handleSubmitStateChange(e) {
 	const val = e.target.querySelector("input[type='text']").value
 
   const time = (new Date(Date.now())).toISOString();
-  const json = JSON.stringify({ "jwt": localStorage.token, 'deviceID': e.target.querySelector('p').innerText, 'record': val, 'dateCreate': time });
+  const deviceId = e.target.querySelector('p').innerText
+  const json = JSON.stringify({ "jwt": localStorage.token, 'deviceID': deviceId, 'record': val, 'dateCreate': time });
   console.log(json);
 	await fetch('http://localhost:8080/write/setting', {
       method: "POST",
@@ -191,13 +185,79 @@ async function handleSubmitStateChange(e) {
       },
       body: json
   })
-  await fetch(`${url}/write/setting`, {
+  fetch(`${url}/write/setting`, {
       method: "POST",
       mode: "cors",
       headers: {
           "Content-type": "application/json"
       },
       body: json
+  }).then(response => {
+    if(response.status === 200) {
+      if(deviceId === localStorage.lightId) light.setCurrentStatus(val)
+      else if(deviceId === localStorage.fanId) temp.setCurrentStatus(val)
+      else if(deviceId === localStorage.humidId) humid.setCurrentStatus(val)
+    }
   })
+  
   // console.log(12)
 }
+
+// get current status of device
+fetch(`${url}/get/setting`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ 'jwt': localStorage.token })
+}).then(async response => {
+  if (response.status == 200) {
+    const res = await response.json();
+    for (let i in res) {
+      if (res[i]['type'] == 1) light.setCurrentStatus(res[i]['record'])
+      else if (res[i]['type'] == 2) temp.setCurrentStatus(res[i]['record'])
+      else if (res[i]['type'] == 3) humid.setCurrentStatus(res[i]['record'])
+    }
+  }
+})
+
+// send http request to database to get current stat of sensor every 30s
+setInterval(() => { 
+  fetch(`${url}/get/data`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ 'jwt': localStorage.token })
+  }). then(async response => {
+    if(response.status === 200) {
+      const res = await response.json()
+      const found = [false, false, false]
+      for (let i = res.length() - 1; i >= 0; i--) {
+        let search = false
+        for (const flag in found)
+          if(!flag) {
+            search = true
+            break
+          }
+        if(search) {
+          switch (res[i]['type']) {
+            case TYPE_LIGHT:
+              light.setCurrent(res[i]['record'])
+              found[TYPE_LIGHT - 1] = true
+              break
+            case TYPE_TEMP: 
+              temp.setCurrent(res[i]['record'])
+              found[TYPE_TEMP - 1] = true
+              break
+            case TYPE_HUMID:
+              humid.setCurrent(res[i]['record'])
+              found[TYPE_HUMID - 1] = true
+              break
+          }
+        }
+        else break
+      }
+    }
+  }) 
+}, 30000)
