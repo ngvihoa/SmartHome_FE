@@ -1,5 +1,3 @@
-import { httpRequest, url } from '../utils.js'
-
 class Report {
     constructor(op, data) {
         this.op = op
@@ -7,15 +5,17 @@ class Report {
     }
 
     generate_report() {
-        const body = {}
-        body.data = this.data.filter(o => o['type'] == this.op)
-        const arr = body.data.map(o => o['record'])
-        body.mean = this.mean(arr)
-        body.variance = Math.round(this.variance(arr) * 100) / 100
-        body.standard_deviation = Math.round(this.standard_deviation(body.variance) * 100) / 100
-        body.min = this.min(arr)
-        body.max = this.max(arr)
-        body.median = this.median(arr)
+        const realData = this.data.filter(o =>  o['type'] == this.op) 
+        const arr = realData.map(o => o['record'])
+        const body = {
+            'data': realData,
+            'mean': this.mean(arr),
+            'variance': Math.round(this.variance(arr) * 100) / 100,
+            'standard_deviation': Math.round(this.standard_deviation(body.variance) * 100) / 100,
+            'min': this.min(arr),
+            'max': this.max(arr),
+            'median': this.median(arr)            
+        }
         return(body)
     }
 

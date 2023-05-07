@@ -20,72 +20,27 @@ const TYPE_LIGHT = 1;
 const TYPE_TEMP = 2;
 const TYPE_HUMID = 3;
 
-const ctx = document.getElementById('lightChart');
+// const ctx = document.getElementById('lightChart');
 
-new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [{
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
-      borderWidth: 1,
-      borderColor: '#ffaf36'
-    }]
-  },
-  options: {
-    scales: {
-      y: {
-        beginAtZero: true
-      }
-    }
-  }
-});
-
-// const ctx1 = document.getElementById('fanChart');
-
-// new Chart(ctx1, {
-// type: 'line',
-// data: {
+// new Chart(ctx, {
+//   type: 'line',
+//   data: {
 //     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
 //     datasets: [{
-//     label: '# of Votes',
-//     data: [12, 19, 3, 5, 2, 3],
-//     borderWidth: 1,
-//     borderColor: '#ff4943'
+//       label: '# of Votes',
+//       data: [12, 19, 3, 5, 2, 3],
+//       borderWidth: 1,
+//       borderColor: '#ffaf36'
 //     }]
-// },
-// options: {
+//   },
+//   options: {
 //     scales: {
-//     y: {
+//       y: {
 //         beginAtZero: true
+//       }
 //     }
-//     }
-// }
+//   }
 // });
-
-// const ctx2 = document.getElementById('humidityChart');
-
-// new Chart(ctx2, {
-// type: 'line',
-// data: {
-//     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-//     datasets: [{
-//     label: '# of Votes',
-//     data: [12, 19, 3, 5, 2, 3],
-//     borderWidth: 1,
-//     borderColor: '#4378ff'
-//     }]
-// },
-// options: {
-//     scales: {
-//     y: {
-//         beginAtZero: true
-//     }
-//     }
-// }
-// });
-
 
 const light = new Current()
 const temp = new Current()
@@ -232,32 +187,15 @@ setInterval(() => {
   }). then(async response => {
     if(response.status === 200) {
       const res = await response.json()
-      const found = [false, false, false]
-      for (let i = res.length() - 1; i >= 0; i--) {
-        let search = false
-        for (const flag in found)
-          if(!flag) {
-            search = true
-            break
-          }
-        if(search) {
-          switch (res[i]['type']) {
-            case TYPE_LIGHT:
-              light.setCurrent(res[i]['record'])
-              found[TYPE_LIGHT - 1] = true
-              break
-            case TYPE_TEMP: 
-              temp.setCurrent(res[i]['record'])
-              found[TYPE_TEMP - 1] = true
-              break
-            case TYPE_HUMID:
-              humid.setCurrent(res[i]['record'])
-              found[TYPE_HUMID - 1] = true
-              break
-          }
-        }
-        else break
-      }
+      const lightRecord = res.filter(o => o['type'] === TYPE_LIGHT).map(o => { return { 'dateCreate': o['dateCreate'], 'record': o['record'] } })
+      const tempRecord = res.filter(o => o['type'] === TYPE_TEMP).map(o => { return { 'dateCreate': o['dateCreate'], 'record': o['record'] } })
+      const humidRecord = res.filter(o => o['type'] === TYPE_HUMID).map(o => { return { 'dateCreate': o['dateCreate'], 'record': o['record'] } })
+      light.setCurrent(lightRecord[lightRecord.length - 1]['record'])
+      temp.setCurrent(tempRecord[tempRecord.length - 1]['record'])
+      humid.setCurrent(humidRecord[humidRecord.length - 1]['record'])
+      lightData.setData(lightRecord.slice(lightRecord.length - 10, lightRecord.length))
+      tempData.setData(tempRecord.slice(tempRecord.length - 10, tempRecord.length))
+      humidData.setData(humidRecord.slice(humidRecord.length - 10, humidRecord.length))
     }
   }) 
 }, 30000)

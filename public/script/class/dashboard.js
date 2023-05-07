@@ -1,7 +1,7 @@
 import { Subject, Observer } from './class.js'
 
 class Current extends Subject {
-    constructor(id, type) {
+    constructor() {
         super()
         this.current = 0
         this.deviceStatus = 0
@@ -51,8 +51,21 @@ class Display extends Observer {
                 stateDisplay.querySelector('span').innerText = '0%'
             }
         }
-        // else if (subject instanceof Data)
-        //     this.el.querySelector('div > canvas') = 
+        else if (subject instanceof Data) {
+            const canva = this.el.querySelector('div > canvas')
+            new Chart(canva, {
+                type: 'line',
+                data: {
+                  labels: this.data.map(ele => ele['dateCreate'].split('T')[1].split('Z')[0]),
+                  datasets: [{
+                    label: 'Statistics',
+                    data: this.data.map(ele => ele['record']),
+                    borderWidth: 1,
+                    borderColor: '#ffaf36'
+                  }]
+                }
+            });
+        }
     }
 }
 
