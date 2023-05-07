@@ -1,12 +1,17 @@
-import { httpRequest, url } from '../utils'
+import { httpRequest, url } from '../utils.js'
 
 class Setting {
-    constructor(el, ws) {
+    constructor(el) {
         this.el = el
-        this.ws = ws
-        httpRequest("POST", `${url}/get/setting`, { 'jwt': localStorage.token }, function() {
-            if (this.status == 200) {
-                const res = JSON.parse(xhr.response)
+        fetch(`${url}/get/setting`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({ 
+                'jwt': localStorage.token, 
+            })
+        }).then(async response => {
+            if (response.status == 200) {
+                const res = await response.json();
                 let light = []
                 let fan = []
                 let humid = []
@@ -19,12 +24,15 @@ class Setting {
                 this.initValue('fan-setting', fan)
                 this.initValue('humidity-setting', humid)
             }
-        })
-        this.el.getElementsByTagName('form').addEventListener('submit', this.handleFormSubmit)
+        });
+        const forms = this.el.getElementsByTagName('form');
+        for (const form of forms)
+            form.addEventListener('submit', this.handleFormSubmit);
+        //this.el.getElementsByTagName('form').forEach((form) => form.addEventListener('submit', this.handleFormSubmit));
     }
 
     initValue(id, initData) {
-        const form = this.el.getElementById(id)
+        const form = document.getElementById(id)
         const formElement = Array.from(form)
         for (let i = 1; i < formElement.length; i++) {
             if (i != 2) formElement[i].value = initData[i]
@@ -33,21 +41,27 @@ class Setting {
     }
 
     handleFormSubmit(e) {
+        
         e.preventDefault()
         const form = e.target
         const formElement = Array.from(form)
         const body = {
-            'deviceId': form.id == 'light-setting' ? localStorage.lightId : form.id == 'fan-setting' ? localStorage.fanId : localStorage.humidId,
+            'dateCreate': (new Date(Date.now())).toISOString(),
+            'deviceID': form.id == 'light-setting' ? localStorage.lightId : form.id == 'fan-setting' ? localStorage.fanId : localStorage.humidId,
             'record': formElement[1].value,
             'automod': formElement[2].checked,
             'onTime': formElement[3].value,
             'offTime': formElement[4].value
         }
-        httpRequest("POST", `${url}/write/setting`, body, function() {
-            if (this.status == 200) console.log("Success")
-            else console.log("Failed")
+        fetch(`${url}/write/setting`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({ 
+                'jwt': localStorage.token, 
+                ...body
+            })
         })
-        this.ws.send(JSON.stringify(body))
+        //this.ws.send(JSON.stringify(body))
     }
 }
 

@@ -28,6 +28,7 @@ class Data extends Subject {
 
 class Display extends Observer {
     constructor(el) {
+        super();
         this.el = el
     }
     

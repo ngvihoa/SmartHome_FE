@@ -6,7 +6,7 @@ function httpRequest(method, url, request_body, func) {
     xhr.send(JSON.stringify(request_body))
 }
 
-const url = ''
+const url = 'http://192.168.0.2:8080'
 
 function cookieToJSON(cookie) {
     const res = {}

@@ -84,11 +84,13 @@
                         </div>
                     </div>
                     <div class="light_controller">
-                    <form action="" method="post" class="intensity_controller changeNum">
+                    <form class="intensity_controller changeNum">
                         <div class="label">Change the intensity of the light</div>
                         <div>
+                            <p hidden id="light_id"></p>
                             <input type="text" name="intensity_input_box" id="intensity_input_box"> <span>%</span>
-                            <span><button class="changeNumBtn">Change</button></span>
+                            
+                            <span><button class="changeNumBtn" type="submit">Change</button></span>
                         </div>
                     </form>
                     <!-- <form action="" method="post" class="stat_light_controller changeState">
@@ -126,6 +128,8 @@
                         <form action="" method="post" class="temperature_controller changeNum">
                             <div class="label">Change the level of the fan</div>
                             <div>
+                                
+                            <p hidden id="fan_id"></p>
                                 <input type="text" name="temperature_input_box" id="temperature_input_box"> <span>%</span>
                                 <span><button class="changeNumBtn">Change</button></span>
                             </div>
@@ -165,6 +169,8 @@
                         <form action="" method="post" class="moisture_controller changeNum">
                             <div class="label">Change the level of the humidifier</div>
                             <div>
+                                
+                            <p hidden id="humid_id"></p>
                                 <input type="text" name="moisture_input_box" id="moisture_input_box"> <span>%</span>
                                 <span><button class="changeNumBtn">Change</button></span>
                             </div>
