@@ -1,4 +1,4 @@
-import { httpRequest, url } from '../utils.js'
+import { url } from '../utils.js'
 
 class Setting {
     constructor(el) {

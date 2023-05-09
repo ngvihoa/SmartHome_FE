@@ -16,76 +16,39 @@ obss.forEach(obs=>{
 localStorage.token = cookieToJSON(document.cookie).cookie
 //-----------------------------------------
 
-const ctx = document.getElementById('lightChart');
+const TYPE_LIGHT = 1;
+const TYPE_TEMP = 2;
+const TYPE_HUMID = 3;
 
-new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [{
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
-      borderWidth: 1,
-      borderColor: '#ffaf36'
-    }]
-  },
-  options: {
-    scales: {
-      y: {
-        beginAtZero: true
-      }
-    }
-  }
-});
+// const ctx = document.getElementById('lightChart');
 
-// const ctx1 = document.getElementById('fanChart');
-
-// new Chart(ctx1, {
-// type: 'line',
-// data: {
+// new Chart(ctx, {
+//   type: 'line',
+//   data: {
 //     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
 //     datasets: [{
-//     label: '# of Votes',
-//     data: [12, 19, 3, 5, 2, 3],
-//     borderWidth: 1,
-//     borderColor: '#ff4943'
+//       label: '# of Votes',
+//       data: [12, 19, 3, 5, 2, 3],
+//       borderWidth: 1,
+//       borderColor: '#ffaf36'
 //     }]
-// },
-// options: {
+//   },
+//   options: {
 //     scales: {
-//     y: {
+//       y: {
 //         beginAtZero: true
+//       }
 //     }
-//     }
-// }
+//   }
 // });
-
-// const ctx2 = document.getElementById('humidityChart');
-
-// new Chart(ctx2, {
-// type: 'line',
-// data: {
-//     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-//     datasets: [{
-//     label: '# of Votes',
-//     data: [12, 19, 3, 5, 2, 3],
-//     borderWidth: 1,
-//     borderColor: '#4378ff'
-//     }]
-// },
-// options: {
-//     scales: {
-//     y: {
-//         beginAtZero: true
-//     }
-//     }
-// }
-// });
-
 
 const light = new Current()
 const temp = new Current()
 const humid = new Current()
+
+const lightData = new Data()
+const tempData = new Data()
+const humidData = new Data()
 
 await (async () => {
   const response = await fetch(`${url}/get/device`, {
@@ -105,23 +68,8 @@ await (async () => {
     document.getElementById('light_id').innerText = localStorage.lightId;
     document.getElementById('fan_id').innerText = localStorage.fanId;
     document.getElementById('humid_id').innerText = localStorage.humidId;
-    // document.querySelector('.fan_controller > form > changeNumBtn').dataset.deviceId = localStorage.fanId
-    // document.querySelector('.humid_controller > form > changeNumBtn').dataset.deviceId = localStorage.humidId
   })
 })()
-
-// webSocket.onmessage = (e) => {
-//   const msg = JSON.parse(e.data)
-//   for (let i = 0; i < msg.length; i++) {
-//     if (msg[i]['type'] == 'light') light.setCurrentStatus(msg[i]['intensity'], msg[i]['deviceStatus'])
-//     else if (msg[i]['type'] == 'temperature') temp.setCurrentStatus(msg[i]['temperature'], msg[i]['deviceStatus'])
-//     else if (msg[i]['type'] == 'humidity') humid.setCurrentStatus(msg[i]['humidity'], msg[i]['deviceStatus'])
-//   }
-// }
-
-const lightData = new Data()
-const tempData = new Data()
-const humidData = new Data()
 
 const getDeviceId = async () => {
   const response = await fetch(`${url}/get/data`, {
@@ -181,7 +129,8 @@ async function handleSubmitStateChange(e) {
 	const val = e.target.querySelector("input[type='text']").value
 
   const time = (new Date(Date.now())).toISOString();
-  const json = JSON.stringify({ "jwt": localStorage.token, 'deviceID': e.target.querySelector('p').innerText, 'record': val, 'dateCreate': time });
+  const deviceId = e.target.querySelector('p').innerText
+  const json = JSON.stringify({ "jwt": localStorage.token, 'deviceID': deviceId, 'record': val, 'dateCreate': time });
   console.log(json);
 	await fetch('http://localhost:8080/write/setting', {
       method: "POST",
@@ -191,13 +140,62 @@ async function handleSubmitStateChange(e) {
       },
       body: json
   })
-  await fetch(`${url}/write/setting`, {
+  fetch(`${url}/write/setting`, {
       method: "POST",
       mode: "cors",
       headers: {
           "Content-type": "application/json"
       },
       body: json
+  }).then(response => {
+    if(response.status === 200) {
+      if(deviceId === localStorage.lightId) light.setCurrentStatus(val)
+      else if(deviceId === localStorage.fanId) temp.setCurrentStatus(val)
+      else if(deviceId === localStorage.humidId) humid.setCurrentStatus(val)
+    }
   })
+  
   // console.log(12)
 }
+
+// get current status of device
+fetch(`${url}/get/setting`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ 'jwt': localStorage.token })
+}).then(async response => {
+  if (response.status == 200) {
+    const res = await response.json();
+    for (let i in res) {
+      if (res[i]['type'] == 1) light.setCurrentStatus(res[i]['record'])
+      else if (res[i]['type'] == 2) temp.setCurrentStatus(res[i]['record'])
+      else if (res[i]['type'] == 3) humid.setCurrentStatus(res[i]['record'])
+    }
+  }
+})
+
+// send http request to database to get current stat of sensor every 30s
+setInterval(() => { 
+  fetch(`${url}/get/data`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ 'jwt': localStorage.token })
+  }). then(async response => {
+    if(response.status === 200) {
+      const res = await response.json()
+      const lightRecord = res.filter(o => o['type'] === TYPE_LIGHT).map(o => { return { 'dateCreate': o['dateCreate'], 'record': o['record'] } })
+      const tempRecord = res.filter(o => o['type'] === TYPE_TEMP).map(o => { return { 'dateCreate': o['dateCreate'], 'record': o['record'] } })
+      const humidRecord = res.filter(o => o['type'] === TYPE_HUMID).map(o => { return { 'dateCreate': o['dateCreate'], 'record': o['record'] } })
+      light.setCurrent(lightRecord[lightRecord.length - 1]['record'])
+      temp.setCurrent(tempRecord[tempRecord.length - 1]['record'])
+      humid.setCurrent(humidRecord[humidRecord.length - 1]['record'])
+      lightData.setData(lightRecord.slice(lightRecord.length - 10, lightRecord.length))
+      tempData.setData(tempRecord.slice(tempRecord.length - 10, tempRecord.length))
+      humidData.setData(humidRecord.slice(humidRecord.length - 10, humidRecord.length))
+    }
+  }) 
+}, 30000)
