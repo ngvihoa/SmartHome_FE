@@ -8,6 +8,7 @@ class Report {
         const realData = this.data.filter(o =>  o['type'] == this.op) 
         const arr = realData.map(o => o['record'])
         const body = {
+            'type': this.op === 1 ? 'light intensity' : this.op === 2 ? 'temperature' : 'humidity',
             'data': realData.map(o => { return { 'dateCreate': o['dateCreate'], 'record': o['record'] } }),
             'mean': this.mean(arr),
             'variance': Math.round(this.variance(arr) * 100) / 100,

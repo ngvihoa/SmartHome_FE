@@ -28,7 +28,7 @@ document.getElementById('gen-report-req').addEventListener("submit", async e => 
         const res = await response.json()
 
         const startDate = Date.parse(document.getElementById('start-date').value)
-        const endDate = Date.parse(document.getElementById('end-date').value) + 86400000
+        const endDate = Date.parse(document.getElementById('end-date').value)
         const data = res.filter(ele => startDate <= Date.parse(ele['dateCreate']) && Date.parse(ele['dateCreate']) <= endDate)
         
         console.log(startDate)
@@ -49,9 +49,9 @@ document.getElementById('gen-report-req').addEventListener("submit", async e => 
             }
         })
         
-        if(document.getElementById('op-sum-rep').classList.contains('aim')) alert(JSON.stringify(displayRep))
-        else if(document.getElementById('op-light-rep').classList.contains('aim')) alert(JSON.stringify(displayRep[0]))
-        else if(document.getElementById('op-temp-rep').classList.contains('aim')) alert(JSON.stringify(displayRep[1]))
-        else if(document.getElementById('op-humid-rep').classList.contains('aim')) alert(JSON.stringify(displayRep[2]))
+        if(document.getElementById('op-sum-rep').classList.contains('aim')) alert(JSON.stringify(rep))
+        else if(document.getElementById('op-light-rep').classList.contains('aim')) alert(JSON.stringify(rep[0]))
+        else if(document.getElementById('op-temp-rep').classList.contains('aim')) alert(JSON.stringify(rep[1]))
+        else if(document.getElementById('op-humid-rep').classList.contains('aim')) alert(JSON.stringify(rep[2]))
     }
 })
