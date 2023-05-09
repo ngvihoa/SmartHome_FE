@@ -83,14 +83,18 @@ const getDeviceId = async () => {
   if(response.status == 200) {
     const res = await response.json()
     const getData = (type) => {
-      return res.filter(o => { return o['type'] == type }).map(o => { o['dateCreate'], o['record'] })
+      const arr = res.filter(o => { return o['type'] == type }).map(o => { return {'dateCreate': o['dateCreate'], 'record': o['record']} })
+      return arr.slice(arr.length - 10, arr.length)
     }
-    const light = getData(1)
-    const temp = getData(2)
-    const humid = getData(3)
-    lightData.setData(light)
-    tempData.setData(temp)
-    humidData.setData(humid)
+    const lightRecord = getData(1)
+    const tempRecord = getData(2)
+    const humidRecord = getData(3)
+    light.setCurrent(lightRecord[9]['record'])
+    temp.setCurrent(tempRecord[9]['record'])
+    humid.setCurrent(humidRecord[9]['record'])
+    lightData.setData(lightRecord)
+    tempData.setData(tempRecord)
+    humidData.setData(humidRecord)
   }
   else {
     console.log('err')
@@ -159,22 +163,24 @@ async function handleSubmitStateChange(e) {
 }
 
 // get current status of device
-fetch(`${url}/get/setting`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({ 'jwt': localStorage.token })
-}).then(async response => {
-  if (response.status == 200) {
-    const res = await response.json();
-    for (let i in res) {
-      if (res[i]['type'] == 1) light.setCurrentStatus(res[i]['record'])
-      else if (res[i]['type'] == 2) temp.setCurrentStatus(res[i]['record'])
-      else if (res[i]['type'] == 3) humid.setCurrentStatus(res[i]['record'])
+setInterval(() => { 
+  fetch(`${url}/get/setting`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ 'jwt': localStorage.token })
+  }).then(async response => {
+    if (response.status == 200) {
+      const res = await response.json();
+      for (let i in res) {
+        if (res[i]['type'] == TYPE_LIGHT) light.setCurrentStatus(res[i]['record'])
+        else if (res[i]['type'] == TYPE_TEMP) temp.setCurrentStatus(res[i]['record'])
+        else if (res[i]['type'] == TYPE_HUMID) humid.setCurrentStatus(res[i]['record'])
+      }
     }
-  }
-})
+  })
+}, 30000)
 
 // send http request to database to get current stat of sensor every 30s
 setInterval(() => { 

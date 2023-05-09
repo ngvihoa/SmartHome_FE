@@ -11,11 +11,12 @@ class Report {
             'data': realData.map(o => { return { 'dateCreate': o['dateCreate'], 'record': o['record'] } }),
             'mean': this.mean(arr),
             'variance': Math.round(this.variance(arr) * 100) / 100,
-            'standard_deviation': Math.round(this.standard_deviation(body.variance) * 100) / 100,
+            'standard_deviation': 0,
             'min': this.min(arr),
             'max': this.max(arr),
             'median': this.median(arr)            
         }
+        body['standard_deviation'] = Math.round(this.standard_deviation(body.variance) * 100) / 100
         return(body)
     }
 
@@ -43,11 +44,11 @@ class Report {
     }
 
     max(arr) {
-        return arr.reduce((prev, cur) => cur > prev ? cur : prev)
+        return arr.reduce((prev, cur) => cur > prev ? cur : prev, arr[0])
     }
 
     min(arr) {
-        return arr.reduce((prev, cur) => cur < prev ? cur : prev)
+        return arr.reduce((prev, cur) => cur < prev ? cur : prev, arr[0])
     }
 }
 

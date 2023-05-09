@@ -26,6 +26,7 @@ class Data extends Subject {
 
     setData(data) {
         this.data = data
+        // console.log(this.data)
         this.notify()
     }
 }
@@ -56,10 +57,10 @@ class Display extends Observer {
             new Chart(canva, {
                 type: 'line',
                 data: {
-                  labels: this.data.map(ele => ele['dateCreate'].split('T')[1].split('Z')[0]),
+                  labels: subject.data.map(ele => ele['dateCreate'].split('T')[1].split('Z')[0]),
                   datasets: [{
                     label: 'Statistics',
-                    data: this.data.map(ele => ele['record']),
+                    data: subject.data.map(ele => ele['record']),
                     borderWidth: 1,
                     borderColor: '#ffaf36'
                   }]
