@@ -63,7 +63,7 @@ button{
     flex-direction: column;
     background-color: #fff;
     padding: 30px 40px;
-    border-radius: 20px;
+    border-radius: 10px;
     box-shadow: 2px 2px 40px rgba(159, 171, 236, 0.2);
     width: 99%;
 }
