@@ -14,7 +14,7 @@ async function writeData({
     deviceID,
     dateCreate
 }) {
-    return fetch("http://192.168.0.2:8080/write/data", {
+    return fetch("http://192.168.12.250:8080/write/data", {
         headers: {
             "Content-Type": "application/json"
         },
@@ -29,7 +29,7 @@ async function writeData({
 }
 
 async function getSetting() {
-    return fetch("http://192.168.0.2:8080/get/allSetting", {
+    return fetch("http://192.168.12.250:8080/get/allSetting", {
             headers: {
                 "Content-Type": "application/json"
             },
@@ -39,7 +39,7 @@ async function getSetting() {
 }
 
 let time;
-let temp, humid, light;
+let temp_real, humid_real, light_real;
 
 async function handleData(chunk) {
     const str = chunk.toString().trim();
@@ -49,10 +49,10 @@ async function handleData(chunk) {
         const [t, h, l] = str.split(',');
         if (!(t || h || l)) return;
         time = (new Date(Date.now())).toISOString();
-        [temp, humid, light] = [t, h, l]
+        [temp_real, humid_real, light_real] = [t, h, l]
      
         
-        console.log({ light, temp, humid });
+        console.log({ temp_real, humid_real, light_real });
     } catch (e) {
         console.log(e);
     }
@@ -80,7 +80,7 @@ async function main() {
     try {
 
         if (!listSerial.length) throw "No device found";
-        const jwt = await fetch("http://192.168.0.2:8080/login", {
+        const jwt = await fetch("http://192.168.12.250:8080/login", {
             headers: {
                 "Content-Type": "application/json"
             },
@@ -91,8 +91,6 @@ async function main() {
 
         token = (await jwt.json()).token;
 
-        const settings = await (await getSetting()).json();
-          console.log(settings);
 
 
 
@@ -102,9 +100,14 @@ async function main() {
             baudRate: 115200
         });
 
+        
         let light = '000000';
         let temp  = '000';
         let humid = '100';
+
+        setInterval(async () => {
+        const settings = await (await getSetting()).json();
+          console.log(settings);
         
         settings.forEach((setting) => {
             const onTime = getSecondsFromTime(setting.onTime);
@@ -118,7 +121,7 @@ async function main() {
                     light = Math.floor(setting.record * 255 / 100).toString(16).padStart(2, '0').repeat(3);
                             
                     if (onTime !== offTime) {
-                        setInterval(() => {
+                        setTimeout(() => {
                             const currentTime = getCurrentTime();
                             if (currentTime >= onTime && lastTime <= onTime) {
                                 port.write('!' + light);
@@ -127,7 +130,7 @@ async function main() {
                                 port.write('!000000');
                             }
                             lastTime = currentTime;
-                        }, 1000);
+                        }, 0);
                     }
                     break;
                 case TYPE_TEMP:
@@ -135,7 +138,7 @@ async function main() {
                     temp = setting.record.toString().padStart(3, '0');
                     
                     if (onTime !== offTime) {
-                        setInterval(() => {
+                        setTimeout(() => {
                             const currentTime = getCurrentTime();
                             if (currentTime >= onTime && lastTime <= onTime) {
                                 port.write('%' + temp);
@@ -144,7 +147,7 @@ async function main() {
                                 port.write('%000');
                             }
                             lastTime = currentTime;
-                        }, 1000);
+                        }, 0);
                     }
                     break;
                 case TYPE_HUMID:
@@ -152,7 +155,7 @@ async function main() {
                     humid = (setting.record === 100 ? 100 : 0).toString().padStart(3, '0');
                     
                     if (onTime !== offTime) {
-                        setInterval(() => {
+                        setTimeout(() => {
                             const currentTime = getCurrentTime();
                             if (currentTime >= onTime && lastTime <= onTime) {
                                 port.write('#' + humid);
@@ -161,11 +164,12 @@ async function main() {
                                 port.write('#000');
                             }
                             lastTime = currentTime;
-                        }, 1000);
+                        }, 0);
                     }
                     break;
             }
         })
+    }, 1000);
         
         setTimeout(() => {
             port.write(`!${light}`);
@@ -180,17 +184,17 @@ async function main() {
         setInterval(async () => {
             const responses = await Promise.all([
                 writeData({
-                    record: light,
+                    record: light_real,
                     deviceID: 4,
                     dateCreate: time
                 }),
                 writeData({
-                    record: temp,
+                    record: temp_real,
                     deviceID: 5,
                     dateCreate: time
                 }),
                 writeData({
-                    record: humid,
+                    record: humid_real,
                     deviceID: 6,
                     dateCreate: time
                 })

@@ -35,8 +35,8 @@ class Setting {
         const form = document.getElementById(id)
         const formElement = Array.from(form)
         for (let i = 1; i < formElement.length; i++) {
-            if (i != 2) formElement[i].value = initData[i]
-            else formElement[i].checked = initData[i] > 0; 
+            if (i != 2) formElement[i].value = initData[i-1]
+            else formElement[i].checked = false; 
         }
     }
 
@@ -60,6 +60,8 @@ class Setting {
                 'jwt': localStorage.token, 
                 ...body
             })
+        }).then(response => {
+            if(response.status === 200) alert("Setting successfully")
         })
         //this.ws.send(JSON.stringify(body))
     }

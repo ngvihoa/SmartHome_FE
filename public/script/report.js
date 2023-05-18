@@ -69,12 +69,12 @@ document.getElementById('gen-report-req').addEventListener("submit", async e => 
             if(op > 0) {
                 innerHtml += `<td>
                         <a href = '${dataUrl}' target='_blank' download='${op === 1 ? 'light' : op === 2 ? 'temp' : 'humid'}data'><button>Data</button></a>
-                        <a href = '${sumUrl}' target='_blank'><button>Summary</button></a>
+                        <a href = '${sumUrl}' target='_blank' download='${op === 1 ? 'light' : op === 2 ? 'temp' : 'humid'}summary'><button>Summary</button></a>
                     </td>
                 </tr>`
             } else {
                 innerHtml += `<td>
-                        <a href = '${sumUrl}' target='_blank'><button>Summary</button></a>
+                        <a href = '${sumUrl}' target='_blank' download='ovrsummary'><button>Summary</button></a>
                     </td>
                 </tr>`
             }
@@ -100,5 +100,7 @@ document.getElementById('gen-report-req').addEventListener("submit", async e => 
             const sumUrl = URL.createObjectURL(new Blob([JSON.stringify(summary[2])], {type: 'application/json'}))
             mountToDOM(3, dataUrl, sumUrl)
         }
+
+        alert("Report generated")
     }
 })
